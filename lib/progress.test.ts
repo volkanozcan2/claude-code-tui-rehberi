@@ -1,7 +1,25 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { it, expect, beforeEach } from 'vitest';
 import { alistirmaTamamlandiIsaretle, alistirmaTamamlandiMi, dersTamamlanmaOrani, genelIlerleme } from './progress';
+import type { Ders } from './types';
 
 beforeEach(() => localStorage.clear());
+
+function ornekDers(slug: string, alistirmaSayisi: number): Ders {
+  return {
+    slug,
+    baslik: slug,
+    bolum: 'temeller',
+    siraNo: 1,
+    ozet: '',
+    icerik: '',
+    alistirmalar: Array.from({ length: alistirmaSayisi }, (_, i) => ({
+      id: `a${i + 1}`,
+      gorev: '',
+      kabulKurallari: [],
+      ipucu: '',
+    })),
+  };
+}
 
 it('işaretlenmemiş egzersiz tamamlanmamış sayılır', () => {
   expect(alistirmaTamamlandiMi('slash-komutlari', 'a1')).toBe(false);
@@ -27,4 +45,14 @@ it('window tanımsızken (SSR) patlamadan false/0 döner', () => {
   delete globalThis.window;
   expect(alistirmaTamamlandiMi('slash-komutlari', 'a1')).toBe(false);
   globalThis.window = original;
+});
+
+it('genel ilerleme, derslerin ortalama tamamlanma oranını doğru hesaplar', () => {
+  const dersler: Ders[] = [ornekDers('ders-1', 2), ornekDers('ders-2', 2)];
+
+  // ders-1: 2 egzersizden 1'i tamamlandı -> 0.5
+  alistirmaTamamlandiIsaretle('ders-1', 'a1');
+  // ders-2: hiçbiri tamamlanmadı -> 0
+
+  expect(genelIlerleme(dersler)).toBeCloseTo(0.25);
 });
