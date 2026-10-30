@@ -1,0 +1,50 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+
+const STORAGE_KEY = 'cc-tui-tema';
+
+type Tema = 'acik' | 'koyu';
+
+function depolananTemaOkuyEylemBasinda(): Tema {
+  const depolanan = window.localStorage.getItem(STORAGE_KEY);
+  if (depolanan === 'acik' || depolanan === 'koyu') {
+    return depolanan;
+  }
+  const koyuTercihEdiliyor =
+    typeof window.matchMedia === 'function' &&
+    window.matchMedia('(prefers-color-scheme: dark)').matches;
+  return koyuTercihEdiliyor ? 'koyu' : 'acik';
+}
+
+function temayiUygula(tema: Tema) {
+  document.documentElement.classList.toggle('dark', tema === 'koyu');
+}
+
+export default function ThemeToggle() {
+  const [tema, setTema] = useState<Tema>('acik');
+
+  useEffect(() => {
+    const baslangicTemasi = depolananTemaOkuyEylemBasinda();
+    setTema(baslangicTemasi);
+    temayiUygula(baslangicTemasi);
+  }, []);
+
+  function degistir() {
+    const yeniTema: Tema = tema === 'koyu' ? 'acik' : 'koyu';
+    setTema(yeniTema);
+    temayiUygula(yeniTema);
+    window.localStorage.setItem(STORAGE_KEY, yeniTema);
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={degistir}
+      aria-label={tema === 'koyu' ? 'Açık temaya geç' : 'Koyu temaya geç'}
+      className="rounded-full border border-card-border bg-card-bg px-3 py-1.5 text-sm text-fg transition-colors hover:border-accent"
+    >
+      {tema === 'koyu' ? '☀️ Açık' : '🌙 Koyu'}
+    </button>
+  );
+}
