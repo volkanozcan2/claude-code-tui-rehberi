@@ -1,0 +1,92 @@
+<h2>Hangi görsel yön daha "sen" gibi hissettiriyor?</h2>
+<p class="subtitle">Claude Code TUI kursu için 4 farklı tema yönü — her biri küçük bir hero/terminal önizlemesiyle. Birden fazlasını beğenebilirsin, en çok çeken birini seç.</p>
+
+<style>
+  .mini-term{border-radius:10px;overflow:hidden;font-family:'SF Mono',Consolas,monospace;font-size:11px;box-shadow:0 8px 24px rgba(0,0,0,.35)}
+  .mini-term .bar{display:flex;gap:6px;padding:8px 10px;align-items:center}
+  .mini-term .dot{width:8px;height:8px;border-radius:50%}
+  .mini-term .body{padding:14px}
+  .mini-term .ghost{opacity:.6}
+  .mini-term .cursor{display:inline-block;width:6px;height:12px;vertical-align:middle;margin-left:2px}
+  .preview-title{font-weight:700;font-size:15px;margin:10px 0 2px}
+  .preview-sub{font-size:12px;opacity:.75;margin-bottom:10px}
+</style>
+
+<div class="cards">
+
+  <div class="card" data-choice="crt" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#0b0f0a;padding:16px;display:flex;align-items:center;justify-content:center;">
+      <div class="mini-term" style="width:100%;background:#0a0f08;border:1px solid #1f3d1a;">
+        <div class="bar" style="background:#0f160c;"><div class="dot" style="background:#2e4a28"></div><div class="dot" style="background:#2e4a28"></div><div class="dot" style="background:#2e4a28"></div></div>
+        <div class="body" style="color:#4fff6b;text-shadow:0 0 4px #2fff4d80;line-height:1.6;">
+          <div>$ claude</div>
+          <div class="ghost">╭─ Claude Code ──────────╮</div>
+          <div class="ghost">│ &gt; TUI'de hoş geldin    │</div>
+          <div class="ghost">╰─────────────────────────╯</div>
+          <div>&gt; <span class="cursor" style="background:#4fff6b"></span></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="preview-title">A · Retro CRT</div>
+      <div class="preview-sub">Fosfor yeşili, hafif tarama çizgileri, eski okul terminal nostaljisi. İddialı ve çok "terminal".</div>
+    </div>
+  </div>
+
+  <div class="card" data-choice="modern-dark" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#0d1117;padding:16px;display:flex;align-items:center;justify-content:center;">
+      <div class="mini-term" style="width:100%;background:#11151c;border:1px solid #232a36;">
+        <div class="bar" style="background:#161b22;"><div class="dot" style="background:#ff6b57"></div><div class="dot" style="background:#ffd166"></div><div class="dot" style="background:#4fd98a"></div></div>
+        <div class="body" style="color:#e6edf3;line-height:1.6;">
+          <div style="color:#7c9bff">$ claude</div>
+          <div class="ghost">Modül 3 · Plan Modu <span style="color:#ff8a4c">●</span></div>
+          <div class="ghost">[1] Keşfet &nbsp; [2] Planla &nbsp; [3] Uygula</div>
+          <div>&gt; <span class="cursor" style="background:#ff8a4c"></span></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="preview-title">B · Modern Koyu</div>
+      <div class="preview-sub">Lacivert-antrasit zemin, canlı turuncu/mavi vurgu. Vercel/Linear gibi cilalı bir dev-tool hissi, ama terminal ruhunu korur.</div>
+    </div>
+  </div>
+
+  <div class="card" data-choice="warm-clay" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#eee6d9;padding:16px;display:flex;align-items:center;justify-content:center;">
+      <div class="mini-term" style="width:100%;background:#fbf4e8;border:1px solid #e3d3b8;">
+        <div class="bar" style="background:#f3e6cf;"><div class="dot" style="background:#d97757"></div><div class="dot" style="background:#d9a357"></div><div class="dot" style="background:#9eb05a"></div></div>
+        <div class="body" style="color:#3a332a;line-height:1.6;">
+          <div style="color:#b5502f">$ claude</div>
+          <div class="ghost">Ders 2 — Slash Komutları</div>
+          <div class="ghost">/help · /clear · /compact</div>
+          <div>&gt; <span class="cursor" style="background:#b5502f"></span></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="preview-title">C · Sıcak Kil Tonu</div>
+      <div class="preview-sub">Krem/kil tonları, turuncu-kahve vurgu. Yumuşak, davetkâr, "öğretici kitap" hissi — ekranda uzun süre durulabilir.</div>
+    </div>
+  </div>
+
+  <div class="card" data-choice="neon-hack" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#070309;padding:16px;display:flex;align-items:center;justify-content:center;">
+      <div class="mini-term" style="width:100%;background:#0a0410;border:1px solid #2d1140;">
+        <div class="bar" style="background:#120a1a;"><div class="dot" style="background:#ff2db0"></div><div class="dot" style="background:#7a3dff"></div><div class="dot" style="background:#2de3ff"></div></div>
+        <div class="body" style="color:#2de3ff;text-shadow:0 0 6px #2de3ff70;line-height:1.6;">
+          <div style="color:#ff2db0">$ claude --dangerously-skip-permissions</div>
+          <div class="ghost">Hook'lar · MCP · Subagent'lar</div>
+          <div class="ghost" style="color:#7a3dff">▓▓▓▓░░░░ %52 context</div>
+          <div>&gt; <span class="cursor" style="background:#2de3ff"></span></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="preview-title">D · Neon Hacker</div>
+      <div class="preview-sub">Siyaha yakın zemin, neon magenta/cyan/mor. Daha "cyberpunk", dikkat çekici ve paylaşılası (sosyal medya ekran görüntüsü dostu).</div>
+    </div>
+  </div>
+
+</div>
+
+<p class="subtitle" style="margin-top:18px">Not: Hangisini seçersen seçelim, koyu/açık mod ikisi de olacak — bu sadece ağırlıklı karakteri belirliyor.</p>
