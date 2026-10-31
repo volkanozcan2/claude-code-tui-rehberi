@@ -1,8 +1,9 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import ModuleCard from './ModuleCard';
+import type { Ders } from '@/lib/types';
 
-const ders = { slug: 'a', baslik: 'A Dersi', bolum: 'temeller', siraNo: 1, ozet: 'Özet', icerik: '', alistirmalar: [] } as const;
+const ders: Ders = { slug: 'a', baslik: 'A Dersi', bolum: 'temeller', siraNo: 1, ozet: 'Özet', icerik: '', alistirmalar: [] };
 
 describe('ModuleCard', () => {
   it('ders başlığını, özetini ve ilerleme yüzdesini gösterir', () => {
