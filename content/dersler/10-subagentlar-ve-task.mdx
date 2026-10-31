@@ -4,6 +4,92 @@ baslik: "Subagent'lar & Task Aracı"
 bolum: ileri-duzey
 siraNo: 10
 ozet: "Subagent'lar ve Task aracıyla işleri devretme."
-alistirmalar: []
+alistirmalar:
+  - id: agents-klasoru
+    gorev: "Özel subagent tanımlarının bulunduğu klasörün yolunu yaz"
+    kabulKurallari:
+      - ".claude/agents"
+      - ".claude/agents/"
+    ipucu: "Ders 9'daki commands klasörüne paralel bir klasör"
 ---
-İçerik yakında.
+
+## Bir işi başka birine devretmek
+
+Şimdiye kadar gördüğümüz her şeyde tek bir konuşma akışı vardı: siz
+bir istek yazdınız, Claude Code araçları kullanarak bu isteği
+karşıladı, context bu tek akış içinde büyüdü. Ama bazı işler, ana
+konuşmanın context'ini doldurmadan ayrı bir yerde halledilmeyi
+hak eder. Örneğin "bu kod tabanında X terimi nerede geçiyor, hepsini
+bul" gibi geniş bir arama; onlarca dosyayı tarayıp sonucu birkaç
+satıra indirger. Ana konuşmaya o onlarca dosyanın tamamını değil,
+sadece özeti taşımak isteriz.
+
+Bunun için Claude Code'da **Task aracı** bulunur. Task aracını
+çalıştırdığınızda, Claude Code o iş için bağımsız bir **subagent**
+(alt-agent) başlatır. Bu subagent kendi başına çalışır, kendisine
+verilen görevi tamamlar ve sonucu ana konuşmaya rapor eder. Subagent
+çalışırken kullandığı tüm ara adımlar — okuduğu dosyalar, denediği
+aramalar, geçici bulgular — kendi alanında kalır; ana konuşmanın
+context'ine sadece nihai rapor eklenir.
+
+## Neden bu kirliliği önlemeye değer
+
+Ders 7'de context'in sınırlı bir kaynak olduğunu, doldukça
+Claude'un performansının düşebileceğini görmüştük. Araştırma veya
+geniş çaplı arama gerektiren işler, doğası itibarıyla çok fazla ara
+adım üretir: bir dosyayı açıp bakarsınız, işe yaramaz, başka bir
+dosyaya geçersiniz, onda da aradığınızı bulamazsınız, derken context
+onlarca gereksiz okuma ile dolar. Bu işi bir subagent'a devrederseniz,
+bütün bu gereksiz adımlar subagent'ın kendi ayrı context'inde kalır;
+ana konuşmanız yalnızca sonuçla ilgilenir, temiz kalır.
+
+Bu, bir ekip içinde birine "şunu araştırıp bana sonucu özetle"
+demeye benzer: araştırmanın bütün ayrıntılarıyla siz uğraşmazsınız,
+sadece özetle ilgilenirsiniz. Task aracı, Claude Code içinde aynı
+devretme ilişkisini kurar.
+
+## `.claude/agents/` — özel subagent tanımları
+
+Claude Code, Task aracıyla iş devredilecek genel amaçlı subagent'lar
+sunar. Ama tıpkı özel slash komutlarında olduğu gibi (Ders 9),
+kendi projenize veya çalışma tarzınıza özgü subagent tanımları da
+oluşturabilirsiniz. Bu özel subagent tanımları, proje kök
+dizinindeki `.claude/agents/` klasörüne eklenir — Ders 9'da gördüğümüz
+`.claude/commands/` klasörüne paralel bir yapı.
+
+Böylece projeye özgü, belirli bir göreve odaklanmış subagent'lar
+tanımlayabilir, Task aracının bu tanımlı subagent'lardan birini
+kullanmasını isteyebilirsiniz. Tanımın tam formatı derste
+ayrıntılarına girmeyeceğimiz bir dosya içeriğidir; burada önemli
+olan nokta, projenize özel subagent tanımlarının nerede yaşadığıdır:
+`.claude/agents/` klasöründe.
+
+## Ne zaman devretmeli
+
+Task aracını her iş için kullanmanıza gerek yok; basit, tek adımlı
+istekler için ana konuşma zaten yeterlidir. Task aracı, özellikle
+şu tür işlerde değer yaratır:
+
+- **Geniş çaplı arama ve araştırma**: kod tabanında bir desenin
+  nerede geçtiğini bulmak, birden fazla dosyayı tarayıp bir soruya
+  cevap aramak.
+- **Bağımsız, kendi içinde tamamlanabilen alt görevler**: ana işten
+  ayrıştırılabilen, sonucu özetle raporlanabilecek bir iş parçası.
+- **Context'i büyük tutacak keşif çalışmaları**: sonucu kısa ama
+  yolu uzun olan işler.
+
+Buna karşılık, üzerinde birlikte çalıştığınız, adım adım karar
+vereceğiniz bir değişiklik için Task aracına devretmek yerine işi
+ana konuşmada sürdürmek daha uygun olur; çünkü o durumda ara
+adımların kendisi de sizin için değerlidir.
+
+## Özet
+
+Bu derste Task aracının nasıl çalıştığını gördünüz: terminale
+yazdığınız bir istekle Claude Code bağımsız bir subagent başlatır,
+bu subagent kendi context'inde çalışıp sonucu ana konuşmaya rapor
+eder. Böylece geniş araştırma veya arama gerektiren işler, ana
+konuşmanızın context'ini kirletmeden halledilir. Projenize özgü
+subagent tanımları ise `.claude/agents/` klasöründe tutulur — Ders
+9'daki `.claude/commands/` klasörüne paralel bir yapı. Aşağıdaki
+egzersizde bu klasörün yolunu yazarak pekiştirin.
