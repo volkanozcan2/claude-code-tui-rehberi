@@ -35,6 +35,7 @@ export default async function LessonPage({ params }: LessonPageProps) {
           <LessonNav dersler={dersler} aktifSlug={slug} />
         </aside>
         <main className="flex-1">
+          <h1 className="mb-4 text-3xl font-bold text-fg">{ders.baslik}</h1>
           <article className="mb-10">{icerik}</article>
           <TerminalSimulator dersSlug={ders.slug} alistirmalar={ders.alistirmalar} />
           <footer className="mt-10 border-t border-card-border pt-4 text-sm text-fg/60">

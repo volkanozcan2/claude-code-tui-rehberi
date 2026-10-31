@@ -13,7 +13,12 @@ describe('LessonPage', () => {
   it('geçerli bir slug için nav ve içeriği render eder', async () => {
     const el = await LessonPage({ params: Promise.resolve({ slug: 'slash-komutlari' }) });
     render(el as React.ReactElement);
-    expect(screen.getByText('Slash Komutları')).toBeInTheDocument();
+    // Başlık hem sayfa <h1>'inde hem de LessonNav'daki aktif bağlantıda
+    // göründüğü için (kasıtlı — her sayfanın tam olarak bir h1'i olmalı),
+    // sorguyu başlık rolüyle sınırlıyoruz.
+    expect(
+      screen.getByRole('heading', { level: 1, name: 'Slash Komutları' })
+    ).toBeInTheDocument();
   });
 
   it('olmayan bir slug için notFound() tetikler', async () => {
