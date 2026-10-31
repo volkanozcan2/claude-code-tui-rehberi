@@ -4,6 +4,91 @@ baslik: "Headless Mod & Script'leme"
 bolum: uzmanlik
 siraNo: 13
 ozet: "Claude Code'u headless modda script'lerden çalıştırma."
-alistirmalar: []
+alistirmalar:
+  - id: headless-bayrak
+    gorev: "Claude Code'u etkileşimli olmayan (tek seferlik) modda çalıştıran bayrağı yaz"
+    kabulKurallari:
+      - "-p"
+      - "--print"
+    ipucu: "Tek harfli bir bayrak, 'print' kelimesinin kısaltması"
 ---
-İçerik yakında.
+
+## Şimdiye kadar hep etkileşimliydi
+
+Bu derse kadar gördüğünüz her şey, Claude Code'u terminalde `claude`
+yazıp başlattığınız, sonra mesaj yazıp yanıt okuduğunuz etkileşimli
+bir döngü (REPL) içinde geçti. Siz bir şey yazıyorsunuz, Claude Code
+yanıtlıyor, siz tekrar yazıyorsunuz — oturum bu şekilde ilerliyor.
+
+Ama bazı durumlarda böyle bir diyaloğa hiç gerek yoktur: tek bir
+soruyu sorup yanıtı almak, ya da bir işlemi bir script içinden,
+insan etkileşimi olmadan çalıştırmak istersiniz. Bunun için Claude
+Code'un **headless mod** (başsız mod) dediğimiz, etkileşimli
+olmayan bir çalışma şekli vardır.
+
+## `-p` / `--print` — tek seferlik çalıştırma
+
+Claude Code'u etkileşimli olmayan modda çalıştırmak için `-p` (veya
+uzun hâliyle `--print`) bayrağı kullanılır. Bu bayrakla birlikte bir
+prompt verdiğinizde, Claude Code REPL açmaz; verdiğiniz prompt'u bir
+defaya mahsus işler, yanıtı terminale yazdırır ve çıkar.
+
+Terminalde şöyle çalıştırabilirsiniz:
+
+```
+claude -p "bu projede kaç test dosyası var?"
+```
+
+Bu komut çalıştığında Claude Code projeyi inceler, sorunuzun
+yanıtını üretir, terminale yazdırır ve oturum burada sona erer —
+ardından yeni bir mesaj yazmanızı bekleyen açık bir döngü kalmaz.
+Bu, headless modun temel özelliğidir: giriş-çıkış tek bir adımdan
+ibarettir, tıpkı terminaldeki diğer komut satırı araçlarını
+çalıştırmaya benzer.
+
+## `--output-format json` / `stream-json` — makine-okunur çıktı
+
+Headless modda ürettiğiniz yanıtı bir insanın okuması için değil,
+başka bir programın işlemesi için istiyorsanız, çıktının biçimini
+de belirleyebilirsiniz. `--output-format json` bayrağı, Claude
+Code'un yanıtını düz metin yerine yapılandırılmış JSON olarak
+vermesini sağlar; `stream-json` seçeneği ise çıktının parça parça,
+akış halinde JSON olarak üretilmesini sağlar.
+
+Bu iki seçeneğin ortak noktası şudur: çıktı, bir script veya başka
+bir araç tarafından ayrıştırılmak (parse edilmek) üzere tasarlanmış
+makine-okunur bir biçimdedir. Çıktının tam alan yapısı kullanım
+amacına göre değişebilir; bu dersin kapsamında önemli olan, böyle
+bir seçeneğin var olduğunu ve Claude Code'un çıktısını kendi
+script'lerinizde programatik olarak işleyebileceğinizi bilmenizdir.
+
+## CI/CD boru hattında kullanım
+
+Headless mod ile makine-okunur çıktının birleştiği en tipik yer,
+bir CI/CD boru hattıdır. Örneğin bir pipeline adımında, Claude
+Code'u `-p` bayrağıyla ve bir `--output-format` seçeneğiyle
+çalıştırarak bir kod incelemesi yaptırabilir, sonucu yapılandırılmış
+biçimde alıp pipeline'ın sonraki adımlarında (örneğin bir rapor
+üretmek veya bir kontrolü geçirip geçirmemek için) kullanabilirsiniz.
+
+Burada da önemli olan genel prensiptir: Claude Code, insan
+etkileşimi beklemeyen, otomatik ortamlarda (CI/CD boru hatları,
+zamanlanmış görevler, başka script'ler) çalıştırılabilir bir araçtır
+— headless mod bunun kapısını açar.
+
+## Neden önemli
+
+Headless mod, Claude Code'u "bir sohbet arayüzü" olmaktan çıkarıp
+kendi otomasyonlarınızın bir bileşeni haline getirir. Etkileşimli
+modda yaptığınız her şeyi, insan gözetimi gerektirmeden, script'ler
+ve boru hatları içinde tekrar tekrar çalıştırabilir hale gelirsiniz.
+
+## Özet
+
+Bu derste Claude Code'u etkileşimli olmayan, tek seferlik modda
+çalıştırmayı öğrendiniz. `-p` (`--print`) bayrağının bir prompt'u
+işleyip çıkış yaptığını, `--output-format json` / `stream-json`
+seçenekleriyle çıktının makine-okunur hâle getirilebildiğini ve bu
+ikilinin CI/CD boru hatlarında otomasyon için nasıl kullanıldığını
+gördünüz. Aşağıdaki egzersizde, headless modu açan bayrağı yazarak
+bunu pekiştirin.

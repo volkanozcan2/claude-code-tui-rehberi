@@ -152,4 +152,22 @@ describe('LessonPage', () => {
     fireEvent.click(screen.getAllByRole('button', { name: /kontrol et/i })[0]);
     expect(screen.getAllByText(/doğru/i).length).toBeGreaterThan(0);
   });
+
+  it('ders 13 egzersizi -p bayrağını kabul eder', async () => {
+    const el = await LessonPage({ params: Promise.resolve({ slug: 'headless-mod-scriptleme' }) });
+    render(el as React.ReactElement);
+    const inputs = screen.getAllByRole('textbox');
+    fireEvent.change(inputs[0], { target: { value: '-p' } });
+    fireEvent.click(screen.getAllByRole('button', { name: /kontrol et/i })[0]);
+    expect(screen.getAllByText(/doğru/i).length).toBeGreaterThan(0);
+  });
+
+  it('ders 13 egzersizi --print uzun bayrağını da kabul eder', async () => {
+    const el = await LessonPage({ params: Promise.resolve({ slug: 'headless-mod-scriptleme' }) });
+    render(el as React.ReactElement);
+    const inputs = screen.getAllByRole('textbox');
+    fireEvent.change(inputs[0], { target: { value: '--print' } });
+    fireEvent.click(screen.getAllByRole('button', { name: /kontrol et/i })[0]);
+    expect(screen.getAllByText(/doğru/i).length).toBeGreaterThan(0);
+  });
 });
