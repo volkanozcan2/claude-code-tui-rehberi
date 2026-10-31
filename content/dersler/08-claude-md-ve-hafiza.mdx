@@ -4,6 +4,102 @@ baslik: "CLAUDE.md ve Proje Hafızası"
 bolum: ileri-duzey
 siraNo: 8
 ozet: "CLAUDE.md ile proje hafızasını yapılandırma."
-alistirmalar: []
+alistirmalar:
+  - id: init-komutu
+    gorev: "Mevcut projeye otomatik bir CLAUDE.md taslağı oluşturan komutu yaz"
+    kabulKurallari:
+      - "/init"
+    ipucu: "Başlatmak anlamına gelen İngilizce kelime"
 ---
-İçerik yakında.
+
+## Bölüm 3'e hoş geldiniz
+
+Buraya kadarki derslerde Claude Code'u günlük kullanımda rahatça
+kullanmanızı sağlayacak temelleri gördünüz: kurulum, REPL, araçlar ve
+izinler, slash komutları, plan modu, context yönetimi. Bölüm 3 ile
+birlikte artık ileri düzey konulara geçiyoruz; bu derslerde Claude
+Code'u tek bir oturumun ötesinde, bir proje boyunca nasıl
+yapılandırabileceğinizi öğreneceksiniz. İlk konumuz, Ders 5'te
+`/init` komutunu tanıtırken ileride ayrıntılı ele alacağımızı
+söylediğimiz konu: **CLAUDE.md ve proje hafızası**.
+
+## Sorun: her oturum sıfırdan başlar
+
+Claude Code ile çalışırken, her yeni oturumda Claude'un o projeyle
+ilgili hiçbir şey bilmediğini fark etmiş olabilirsiniz. Hangi
+komutla testlerin çalıştırıldığını, projede hangi kod stilinin
+tercih edildiğini, hangi dizinlere dokunulmaması gerektiğini — bunların
+hepsini, her oturumda yeniden anlatmanız gerekir. Bu, özellikle
+üzerinde sürekli çalıştığınız bir proje için tekrar eden ve zaman
+kaybettiren bir durumdur.
+
+Claude Code bu sorunu çözmek için bir **proje hafızası** mekanizması
+sunar: proje kök dizinine yerleştirilen bir `CLAUDE.md` dosyası.
+
+## CLAUDE.md nedir?
+
+`CLAUDE.md`, projenizin kök dizinine koyduğunuz sıradan bir Markdown
+dosyasıdır. İçine projeyle ilgili, Claude'un bilmesini istediğiniz
+bilgileri yazarsınız: projenin ne iş yaptığı, testlerin nasıl
+çalıştırıldığı, hangi kod kurallarına uyulması gerektiği, hangi
+dosyalara dokunulmaması gerektiği gibi.
+
+Buradaki asıl fark, bu dosyanın okunma şeklidir: Claude Code, bir
+projede çalışırken `CLAUDE.md` dosyasını **her oturumun başında
+otomatik olarak** okur. Yani siz bu bilgiyi her sohbette yeniden
+yazmak zorunda kalmazsınız — bir kez `CLAUDE.md`'ye yazdığınız bir
+bilgi, o projedeki her sonraki oturumda Claude'un önünde hazır
+bulunur. Bu yüzden `CLAUDE.md`'ye "proje hafızası" denir: oturumlar
+arasında kalıcı olan, projeye özgü bir bilgi deposudur.
+
+## Proje seviyesi ve kullanıcı seviyesi
+
+`CLAUDE.md` iki farklı seviyede tutulabilir:
+
+- **Proje seviyesi**: projenin kök dizinine yerleştirilen `CLAUDE.md`
+  dosyası. Burada yazdığınız bilgi, yalnızca o projeyle ilgilidir ve
+  genellikle proje deposuyla birlikte saklanır — böylece sizinle
+  aynı projede çalışan başka kişiler de bu bilgiden yararlanabilir.
+- **Kullanıcı seviyesi**: `~/.claude/CLAUDE.md` yolunda tutulan,
+  kullanıcıya özel dosya. Burada yazdığınız bilgi, belirli bir
+  projeye bağlı değildir; genel tercihlerinizi (örneğin iletişim
+  tarzı veya alışkanlıklarınız gibi projeler arasında değişmeyen
+  şeyleri) tutmak için kullanılır.
+
+Yani proje seviyesindeki `CLAUDE.md` "bu proje nasıl çalışır"
+sorusuna, kullanıcı seviyesindeki `~/.claude/CLAUDE.md` ise "ben
+nasıl çalışmak isterim" sorusuna karşılık gelir.
+
+## `/init` — otomatik taslak oluşturma
+
+Bir projede henüz `CLAUDE.md` dosyanız yoksa, bunu sıfırdan elle
+yazmak zorunda değilsiniz. `/init` komutu, içinde bulunduğunuz proje
+için otomatik bir `CLAUDE.md` taslağı oluşturur. Bu komutu
+çalıştırdığınızda Claude Code, projeyi inceleyerek projeye uygun
+başlangıç bilgilerini içeren bir taslak dosya hazırlar; siz de bu
+taslağı kendi ihtiyaçlarınıza göre düzenleyip tamamlayabilirsiniz.
+
+Yeni bir projede çalışmaya başlarken ilk yapılacak işlerden biri
+genellikle `/init` komutunu çalıştırmaktır — böylece sıfırdan değil,
+hazır bir taslaktan ilerlersiniz.
+
+## `/memory` — CLAUDE.md'yi düzenleme
+
+`CLAUDE.md` dosyasını düzenlemek için dosyayı elle açıp düzenlemeniz
+gerekmez; `/memory` komutu bu dosyayı düzenlemenizi sağlar. `/init`
+ile oluşturduğunuz taslağı zamanla güncellemek, yeni bir bilgi eklemek
+veya artık geçerli olmayan bir notu çıkarmak istediğinizde
+başvuracağınız komut budur.
+
+## Özet
+
+`CLAUDE.md`, proje kök dizinine yerleştirilen ve Claude Code
+tarafından her oturumun başında otomatik olarak okunan bir proje
+hafızası dosyasıdır; bu sayede projeyle ilgili bilgiyi her oturumda
+yeniden anlatmak zorunda kalmazsınız. Proje seviyesindeki
+`CLAUDE.md`'nin yanında, projeden bağımsız kişisel tercihleriniz
+için `~/.claude/CLAUDE.md` yolunda bir kullanıcı seviyesi dosya da
+tutulabilir. `/init` komutu bir proje için otomatik bir `CLAUDE.md`
+taslağı oluşturur, `/memory` komutu ise bu dosyayı düzenlemenizi
+sağlar. Aşağıdaki egzersizde, mevcut bir proje için otomatik taslak
+oluşturan komutu kendiniz yazarak bunu pekiştirin.
