@@ -4,6 +4,91 @@ baslik: "Context Yönetimi & Compaction"
 bolum: gunluk-kullanim
 siraNo: 7
 ozet: "Context penceresini ve compaction davranışını yönetme."
-alistirmalar: []
+alistirmalar:
+  - id: compact-komutu
+    gorev: "Context'i silmeden özetleyen komutu yaz"
+    kabulKurallari:
+      - "/compact"
+    ipucu: "Sıkıştırmak/özetlemek anlamına gelen İngilizce kelime"
 ---
-İçerik yakında.
+
+## Context penceresi nedir?
+
+Claude Code ile yürüttüğünüz bir konuşmada, Claude her yeni mesajı
+değerlendirirken genellikle o oturumun geçmişindeki önceki mesajları da
+dikkate alır — bunu Ders 3'te görmüştünüz. Ama bu geçmiş sınırsız
+büyüyemez. Claude gibi büyük dil modeli tabanlı her araç, bir kerede
+"görebileceği" metin miktarı açısından bir üst sınıra sahiptir; bu
+sınıra **context penceresi** denir. Context penceresi, bir konuşmanın
+o ana kadarki mesajlarını, okunan dosyaları, çalıştırılan komutların
+çıktılarını ve benzeri her şeyi kapsayan, modelin tek seferde
+değerlendirebildiği toplam alan gibi düşünülebilir.
+
+Bir oturum uzadıkça — çok sayıda mesaj gönderdikçe, büyük dosyalar
+okutup birçok komut çalıştırdıkça — bu geçmiş birikir ve context
+penceresi giderek dolar. Context penceresinin tam büyüklüğü ve bu
+büyüklüğün nasıl hesaplandığı kullandığınız sürüme ve modele göre
+değişebilir; burada bilmeniz gereken asıl şey, bu kapasitenin sonsuz
+olmadığı ve konuşma uzadıkça doldurulduğudur.
+
+## Context dolunca ne olur: auto-compact
+
+Context penceresi doldukça, Claude Code bir noktada geçmişi daha
+kompakt bir hale getirme ihtiyacı duyar; aksi halde yeni mesajlar için
+yer kalmaz. Birçok Claude Code sürümünde bu durum otomatik olarak ele
+alınır: context penceresi belirli bir doluluğa yaklaştığında, Claude
+Code geçmişin bir kısmını kendiliğinden özetleyerek yer açar. Bu
+davranışa **auto-compact** denir.
+
+Auto-compact'ın tam olarak hangi eşikte devreye girdiği ve özetleme
+sürecinin ayrıntıları sürüme göre değişebilir; önemli olan genel
+prensiptir: context dolmaya yaklaştığında Claude Code, konuşmayı
+tamamen kesmek yerine geçmişi özetleyerek sürdürmeye çalışır. Böylece
+siz araya girmeseniz bile oturum, context sınırına çarpıp durmak
+zorunda kalmadan devam edebilir.
+
+## Context'i kendiniz özetletmek: `/compact`
+
+Auto-compact'ı beklemek zorunda değilsiniz. Context'in dolmasına
+yaklaşmadan önce, kendi isteğinizle geçmişi özetletmek için `/compact`
+komutunu kullanabilirsiniz. `/compact` yazıp gönderdiğinizde, Claude
+Code o ana kadarki konuşma geçmişini daha kısa bir özete indirger;
+önemli noktalar ve kararlar bu özette korunur, ama ayrıntılı
+mesaj-yanıt çiftlerinin kendisi yer kaplamaktan çıkar. Böylece hem
+context'te yeni mesajlar için yer açılır hem de konuşmanın ana hattı
+kaybolmaz.
+
+`/compact` özellikle uzun süren bir oturumda, konu hâlâ aynı kalmaya
+devam ederken ("aynı özellik üzerinde çalışmayı sürdürüyorum ama
+geçmiş çok şişti") kullanışlıdır. Konuyu değiştirmiyorsunuz, sadece
+geçmişin tuttuğu yeri küçültüyorsunuz.
+
+## `/compact` ile `/clear` arasındaki fark
+
+Ders 3'te `/clear` komutunu görmüştünüz: `/clear`, o ana kadarki mesaj
+geçmişini tamamen siler ve konuşma sanki yeni başlamış gibi, boş bir
+geçmişle sürer. `/compact` ise bambaşka bir şey yapar — geçmişi
+*silmez*, onu *özetler*:
+
+- **`/clear`**, geçmişi tamamen siler; özet de dahil hiçbir iz
+  kalmaz. Yeni, ilgisiz bir işe geçerken kullanılır.
+- **`/compact`**, geçmişi özetler; ayrıntılar sıkışır ama konuşmanın
+  ana hattı ve önemli kararlar özet biçiminde korunur. Aynı işe devam
+  ederken, context'te yer açmak için kullanılır.
+
+Kısaca: `/clear` geçmişi "unutturur", `/compact` ise geçmişi
+"küçülterek hatırlatır". Hangisini seçeceğiniz, o anda yaptığınız işle
+ilgili geçmişe ihtiyacınız olup olmamasına bağlıdır — işe devam
+ediyorsanız `/compact`, tamamen yeni bir işe geçiyorsanız `/clear`.
+
+## Özet
+
+Context penceresi, Claude'un bir konuşmada tek seferde
+değerlendirebildiği toplam alandır ve oturum uzadıkça dolar. Birçok
+sürümde context dolmaya yaklaştığında Claude Code, geçmişi otomatik
+olarak özetleyerek yer açar (auto-compact); bunu kendi isteğinizle
+tetiklemek için de `/compact` komutunu kullanabilirsiniz. `/compact`,
+Ders 3'teki `/clear`'dan farklı olarak geçmişi silmez, onu özetleyerek
+korur — bu nedenle aynı işe devam ederken context'te yer açmanın
+tercih edilen yoludur. Aşağıdaki egzersizde, context'i silmeden
+özetleyen komutu kendiniz yazarak bunu pekiştirin.

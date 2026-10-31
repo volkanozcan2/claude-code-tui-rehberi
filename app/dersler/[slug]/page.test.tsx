@@ -80,4 +80,13 @@ describe('LessonPage', () => {
     fireEvent.click(screen.getAllByRole('button', { name: /kontrol et/i })[0]);
     expect(screen.getAllByText(/doğru/i).length).toBeGreaterThan(0);
   });
+
+  it('ders 7 egzersizi /compact komutunu kabul eder', async () => {
+    const el = await LessonPage({ params: Promise.resolve({ slug: 'context-ve-compaction' }) });
+    render(el as React.ReactElement);
+    const inputs = screen.getAllByRole('textbox');
+    fireEvent.change(inputs[0], { target: { value: '/compact' } });
+    fireEvent.click(screen.getAllByRole('button', { name: /kontrol et/i })[0]);
+    expect(screen.getAllByText(/doğru/i).length).toBeGreaterThan(0);
+  });
 });
