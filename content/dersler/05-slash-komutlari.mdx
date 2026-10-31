@@ -4,6 +4,76 @@ baslik: "Slash Komutları"
 bolum: gunluk-kullanim
 siraNo: 5
 ozet: "Yerleşik slash komutlarıyla iş akışını hızlandırma."
-alistirmalar: []
+alistirmalar:
+  - id: cost-komutu
+    gorev: "O oturumda harcanan token/maliyeti gösteren komutu yaz"
+    kabulKurallari:
+      - "/cost"
+    ipucu: "İngilizce 'maliyet' kelimesi"
 ---
-İçerik yakında.
+
+## Slash komutları nedir?
+
+Şimdiye kadarki derslerde Claude Code'a hep normal cümlelerle istekte
+bulundunuz: "bu dosyayı özetle", "şu fonksiyonu düzenle" gibi. Bunların
+yanında, satırın başına `/` karakteriyle yazılan ayrı bir komut kümesi
+daha vardır. Bu komutlara "slash komutları" denir ve bir görev isteği
+değil, Claude Code'un kendi davranışına veya oturumla ilgili bilgilere
+yönelik doğrudan bir talimat olarak işlenirler. Yani bir slash komutu
+yazdığınızda Claude Code, isteğinizi yerine getirmek için düşünüp bir
+plan kurmaz; doğrudan o komuta karşılık gelen eylemi gerçekleştirir.
+
+Claude Code'un sağladığı slash komutlarından altısına bu derste
+bakacağız: `/help`, `/model`, `/cost`, `/status`, `/doctor` ve
+`/init`. Her biri farklı bir amaca hizmet eder; bu yüzden hangisini ne
+zaman kullanacağınız, o anda ihtiyacınız olan bilgiye veya yapmak
+istediğiniz ayara bağlıdır.
+
+## /help — komut listesi
+
+`/help` komutu, Claude Code'da kullanabileceğiniz slash komutlarının
+listesini gösterir. Bir komutun adını tam olarak hatırlamadığınızda
+veya hangi komutların var olduğunu görmek istediğinizde başvurabileceğiniz
+komut budur.
+
+## /model — model değiştirme
+
+`/model` komutu, Claude Code'un o oturumda kullandığı modeli
+değiştirmenizi sağlar. Oturum sırasında farklı bir modele geçmek
+istediğinizde kullanılan komut budur.
+
+## /cost — token/maliyet özeti
+
+`/cost` komutu, o oturumda harcanan token miktarının ve buna karşılık
+gelen maliyetin bir özetini gösterir. Oturum boyunca ne kadar kaynak
+tükettiğinizi görmek istediğinizde başvurduğunuz komut budur.
+
+## /status — oturum bilgisi
+
+`/status` komutu, geçerli oturumla ilgili bilgileri gösterir. Oturumun
+anlık durumuna dair bir görünüm almak istediğinizde kullanılan komuttur.
+
+## /doctor — kurulum teşhisi
+
+`/doctor` komutu, Claude Code kurulumunuzu teşhis eder. Kurulumla
+ilgili bir sorundan şüphelendiğinizde durumu kontrol etmek için
+kullanılan komuttur.
+
+## /init — proje için CLAUDE.md oluşturma
+
+`/init` komutu, içinde bulunduğunuz proje için bir CLAUDE.md dosyası
+oluşturur. CLAUDE.md ve proje hafızası konusunu ileride ayrı bir
+derste daha ayrıntılı ele alacağız; burada yalnızca `/init` komutunun
+bu dosyayı oluşturmaya yaradığını not ediyoruz.
+
+## Özet
+
+Slash komutları, normal isteklerden farklı olarak Claude Code'un kendi
+davranışını ve oturumla ilgili bilgileri yönetmenize yarar. Bu derste
+altı yerleşik slash komutu gördünüz: `/help` kullanılabilir komutların
+listesini gösterir, `/model` oturumda kullanılan modeli değiştirir,
+`/cost` o oturumda harcanan token ve maliyetin özetini verir,
+`/status` oturumla ilgili bilgileri gösterir, `/doctor` kurulumu
+teşhis eder ve `/init` proje için bir CLAUDE.md dosyası oluşturur.
+Aşağıdaki egzersizde, oturumda harcanan maliyeti gösteren komutu
+yazarak bunu pekiştirin.
