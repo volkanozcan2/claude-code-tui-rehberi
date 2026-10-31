@@ -3,7 +3,129 @@ slug: araclar-ve-izinler
 baslik: "Araçlar & İzin Modları"
 bolum: gunluk-kullanim
 siraNo: 4
-ozet: "Claude Code'un kullandığı araçlar ve izin modlarını öğrenme."
-alistirmalar: []
+ozet: "Claude Code'un kullandığı araçları ve izin modlarını öğrenme."
+alistirmalar:
+  - id: izin-modu-komutu
+    gorev: "İzin modunu değiştirmek için kullanılan slash komutunu yaz"
+    kabulKurallari:
+      - "/permissions"
+    ipucu: "/permissions"
 ---
-İçerik yakında.
+
+## Claude Code bir sohbet botu değildir
+
+Şimdiye kadarki derslerde mesaj yazıp yanıt aldığınızı gördünüz; bu
+yüzünden Claude Code'u sıradan bir sohbet botu gibi düşünmek kolaydır.
+Ama aradaki temel fark şu: Claude Code, sizinle sadece metin
+alışverişi yapmakla kalmaz, bilgisayarınızda gerçek eylemler
+gerçekleştirebilir. Bir dosyayı okuyabilir, bir dosyayı düzenleyebilir,
+yeni bir dosya oluşturabilir ya da bir kabuk (shell) komutu
+çalıştırabilir. Bu eylemlerin her birine "araç" (tool) denir; Claude
+Code, sizin isteğinizi anlamak için önce düşünür, sonra gerektiğinde bu
+araçlardan birini veya birkaçını kullanarak isteğinizi yerine getirir.
+
+## Temel araçlar
+
+Claude Code'un kullandığı araçlar çeşitlidir, ama bu derste dört temel
+türe odaklanacağız:
+
+### Dosya okuma
+
+Bir dosyanın içeriğini incelemek istediğinde Claude Code bu aracı
+kullanır. Örneğin "bu dosyada ne var, özetle" dediğinizde, Claude Code
+önce o dosyayı okur, sonra size okuduklarına dayanan bir yanıt verir.
+Dosya okuma, bilgisayarınızda hiçbir şeyi değiştirmediği için en
+"zararsız" araç türü sayılabilir.
+
+### Dosya düzenleme
+
+Var olan bir dosyanın içeriğini değiştirmek istediğinizde kullanılan
+araçtır. Örneğin "bu fonksiyonun adını değiştir" gibi bir istekte,
+Claude Code önce ilgili dosyayı okur, değişikliği nerede yapacağını
+belirler ve dosyayı günceller. Bu araç, dosya üzerinde gerçek bir
+değişiklik yaptığı için okumadan farklı bir kategoriye girer: geri
+alınması gerekebilecek bir eylemdir.
+
+### Yeni dosya oluşturma
+
+Henüz var olmayan bir dosyayı sıfırdan yazmak istediğinizde kullanılan
+araçtır. Örneğin "bana yeni bir yardımcı dosya oluştur" dediğinizde,
+Claude Code bu aracı kullanarak dosyayı oluşturur ve içeriğini yazar.
+Düzenleme aracına benzer şekilde, bu da dosya sisteminde gerçek bir iz
+bırakan bir eylemdir.
+
+### Shell komutu çalıştırma
+
+Terminalde çalıştırılabilecek bir komutu (örneğin bir test paketini
+çalıştırmak, bir paket yüklemek ya da bir git komutu vermek) Claude
+Code'un sizin yerinize çalıştırmasını istediğinizde kullanılan
+araçtır. Bu, dört temel araç arasında potansiyel olarak en geniş
+etkiye sahip olanıdır, çünkü bir shell komutu dosya sistemi dışında da
+etkiler yaratabilir (örneğin bir ağ isteği göndermek veya bir süreci
+başlatmak gibi).
+
+Bu dört aracın ortak noktası şu: hepsi, Claude Code'un sizin isteğinizi
+yerine getirmek için "gerçek dünyada" bir şey yapmasını sağlar. İşte
+tam bu noktada "izin modu" kavramı devreye girer — çünkü bu eylemlerin
+hangilerinin sizden onay istemeden, hangilerinin onay istenerek
+yapılacağını izin modu belirler.
+
+## İzin modları neden var?
+
+Dosya okuma genellikle risksiz kabul edilebilir, ama dosya düzenleme,
+yeni dosya oluşturma ve özellikle shell komutu çalıştırma gibi eylemler
+geri alınması güç sonuçlara yol açabilir. Bu yüzden Claude Code, bu
+türden eylemleri gerçekleştirmeden önce sizden onay isteyip
+istemeyeceğini belirleyen bir "izin modu" sistemiyle çalışır. İzin
+modu, bir anlamda Claude Code'a ne kadar özgürlük tanıdığınızı
+belirleyen bir ayardır.
+
+## Dört izin modu
+
+Claude Code'da genel olarak dört izin modundan bahsedilir; her biri
+Claude Code'un eylemlerden önce sizden ne kadar onay isteyeceğini
+farklı şekilde ayarlar:
+
+- **`default`**: Varsayılan moddur. Bu modda Claude Code, dosya
+  düzenleme, yeni dosya oluşturma veya komut çalıştırma gibi her
+  değişiklik öncesinde sizden onay ister. Bu, en temkinli moddur: hiçbir
+  şey sizin onayınız olmadan gerçekleşmez.
+- **`acceptEdits`**: Bu modda Claude Code, dosya düzenlemelerini
+  otomatik olarak kabul eder; yani düzenleme önerileri için ayrı ayrı
+  onay istemez. Tekrarlayan, görece küçük düzenlemelerle ilerlediğiniz
+  durumlarda akışı hızlandırmak için kullanılabilir.
+- **`plan`**: Bu modda Claude Code hiçbir değişiklik yapmaz; sizden
+  istenen işi yapmadan önce sadece bir plan sunar. Değişikliklerin ne
+  olacağını görüp onaylamadan hiçbir şeyin uygulanmasını istemediğiniz
+  durumlar için uygundur.
+- **`bypassPermissions`**: Bu modda Claude Code hiçbir onay istemez;
+  tüm araçları serbestçe kullanır. Bu, en az temkinli moddur ve
+  dikkatli kullanılmalıdır, çünkü dosya düzenlemeleri ve komut
+  çalıştırmaları sizden herhangi bir onay beklenmeden gerçekleşir.
+
+Bu dört modun ortak noktası, her birinin Claude Code'a "ne kadar
+özgürlük" tanındığını farklı şekilde ayarlamasıdır: `plan` hiçbir
+değişiklik yapmadan sadece öneri sunar, `default` her değişiklik için
+tek tek onay ister, `acceptEdits` düzenlemeler için onay istemeyi
+bırakır, `bypassPermissions` ise hiçbir eylem için onay istemez.
+Hangi modu seçeceğiniz, yaptığınız işin hassasiyetine ve o anda ne
+kadar kontrol istediğinize bağlıdır.
+
+## Mod değiştirme
+
+Ders 2'de bahsedilen `Shift+Tab` kısayolu veya `/permissions` komutuyla
+bu modlar arasında geçiş yapabilirsiniz. `/permissions` komutu, izin
+moduyla ilgili ayarları görüntülemek ve değiştirmek için kullanılan
+slash komutudur — tam olarak bu dersin egzersizinde karşınıza
+çıkacaktır.
+
+## Özet
+
+Claude Code, sizinle sadece konuşan değil, dosya okuma, dosya
+düzenleme, yeni dosya oluşturma ve shell komutu çalıştırma gibi
+araçlarla gerçek eylemler gerçekleştiren bir programdır. Bu eylemlerin
+ne kadar onay gerektireceğini belirleyen dört izin modu vardır:
+`default`, `acceptEdits`, `plan` ve `bypassPermissions`. Bu modlar
+arasında geçiş yapmak için `Shift+Tab` kısayolunu veya `/permissions`
+komutunu kullanabilirsiniz. Aşağıdaki egzersizde, izin modunu
+değiştirmek için kullanılan slash komutunu yazarak bunu pekiştirin.
