@@ -4,6 +4,98 @@ baslik: "Hook'lar"
 bolum: ileri-duzey
 siraNo: 11
 ozet: "Hook'larla Claude Code'un davranışını otomatikleştirme."
-alistirmalar: []
+alistirmalar:
+  - id: pretooluse-olayi
+    gorev: "Bir aracın ÇALIŞTIRILMASINDAN ÖNCE tetiklenen hook olayının adını yaz"
+    kabulKurallari:
+      - "PreToolUse"
+    ipucu: "'Pre' = önce, 'ToolUse' = araç kullanımı"
 ---
-İçerik yakında.
+
+## Davranışı isteğe bağlı değil, otomatik yapmak
+
+Ders 9'da `settings.json` üzerinden Claude Code'un davranışını
+yapılandırmayı gördünüz: izin kuralları, ortam değişkenleri ve
+"hook ayarları" diye andığımız, ileride ayrıntısına gireceğimiz bir
+bölüm. Bu derste o bölümü açıyoruz: **hook'lar**.
+
+Şimdiye kadar gördüğümüz her mekanizma, bir şekilde sizin isteğinize
+bağlıydı: özel bir slash komutu çalıştırmak için `/komut-adi` yazmanız
+gerekiyordu (Ders 9), bir işi subagent'a devretmek için Task aracının
+tetiklenmesi gerekiyordu (Ders 10). Hook'lar farklıdır: siz hiçbir
+şey yazmadan, Claude Code'un kendi iş akışı içinde belirli bir an
+geldiğinde otomatik olarak çalışırlar. "Her tool çağrısından önce
+şunu kontrol et", "her tool çağrısından sonra şunu çalıştır" gibi
+kuralları, bir kere tanımlayıp bir daha hiç düşünmemek için
+kullanılırlar.
+
+## Yaşam döngüsü olayları
+
+Claude Code, çalışması sırasında belirli **olaylar** (events) üretir;
+hook'lar bu olaylardan birine bağlanıp, o olay gerçekleştiğinde
+otomatik olarak devreye girer. Bu olaylardan bazıları:
+
+- **`PreToolUse`**: bir araç çalıştırılmadan ÖNCE tetiklenir. Örneğin
+  Claude bir dosyayı düzenlemek üzereyken, düzenleme henüz
+  uygulanmadan bu olay tetiklenir.
+- **`PostToolUse`**: bir araç çalıştırıldıktan SONRA tetiklenir.
+  Düzenleme uygulandıktan, komut çalıştırıldıktan sonra devreye
+  girer.
+- **`Notification`**: Claude Code size bir bildirim gösterdiğinde
+  tetiklenir.
+- **`Stop`**: Claude Code bir yanıtı tamamlayıp durduğunda tetiklenir.
+
+Bunlara ek başka yaşam döngüsü olayları da bulunur; ortak nokta,
+her birinin Claude Code'un iş akışındaki belirli, isimlendirilmiş
+bir ana karşılık gelmesidir. İsimlerindeki mantık da bu ana göre
+kuruludur: "Pre" öneki "önce", "Post" öneki "sonra" anlamına gelir;
+"ToolUse" ise "araç kullanımı"nı ifade eder.
+
+## Hook'lar nerede tanımlanır
+
+Hook'lar, Ders 9'da gördüğümüz `settings.json` dosyası içinde
+tanımlanır. Yani hook'lar için ayrı bir dosya veya klasör yoktur;
+`settings.json`'ın izin kuralları ve ortam değişkenleriyle aynı yerde,
+kendine ayrılmış bir bölümde dururlar. Bir hook tanımı temelde şu
+bilgiyi taşır: hangi olaya bağlanacak (`PreToolUse`, `PostToolUse`
+gibi) ve o olay gerçekleştiğinde hangi komutun çalıştırılacağı.
+Tanımın tam alan yapısına bu derste girmiyoruz; önemli olan, bu
+yapılandırmanın da proje veya kullanıcı seviyesindeki `settings.json`
+üzerinden yönetildiğidir — tıpkı izin kuralları gibi.
+
+## Örnek: bir araçtan sonra otomatik formatlama
+
+Hook'ların en sık karşılaşılan kullanımlarından biri, bir araç
+çalıştıktan sonra projenizin standartlarını otomatik olarak
+uygulamaktır. Örneğin bir dosya düzenlendikten sonra, o dosya
+üzerinde bir formatlayıcı (kod biçimlendirici) otomatik olarak
+çalıştırılabilir. Böylece siz veya Claude, "şimdi formatlayıcıyı
+çalıştır" diye ayrıca istemek zorunda kalmaz; `PostToolUse` olayına
+bağlı hook, düzenleme tamamlanır tamamlanmaz formatlayıcıyı kendisi
+tetikler.
+
+Benzer bir mantık `PreToolUse` için de işler: bir araç henüz
+çalışmadan önce bir kontrol yapılmasını, örneğin belirli bir
+komutun engellenmesini veya bir ön koşulun sağlanmasını isteyebilirsiniz.
+Her iki durumda da fikir aynıdır: belirli bir anda tekrar tekrar elle
+yapacağınız bir işi, bir kere tanımlayıp Claude Code'a bırakmak.
+
+## Neden önemli
+
+Hook'lar, Ders 9'daki özel komutlardan farklı bir otomasyon katmanı
+sunar. Özel komutlar siz tetiklediğiniz için "isteğe bağlı"dır; hook'lar
+ise tanımlandığı olay her gerçekleştiğinde, siz hatırlamasanız da
+devreye girer. Bu da onları, "asla unutulmaması gereken" kurallar
+için ideal kılar: her düzenlemeden sonra biçimlendirme yapılması,
+belirli bir bildirimde ek bir adımın otomatik tetiklenmesi gibi.
+
+## Özet
+
+Bu derste Claude Code'un yaşam döngüsü boyunca ürettiği olayları
+(`PreToolUse`, `PostToolUse`, `Notification`, `Stop` ve benzerleri)
+ve bu olaylara bağlanan hook'ların `settings.json` içinde nasıl
+tanımlandığını gördünüz. Bir aracın çalışmasından önce veya sonra
+otomatik bir komut çalıştırmanın — örneğin düzenleme sonrası bir
+formatlayıcı tetiklemenin — hook'larla nasıl mümkün olduğunu
+inceledik. Aşağıdaki egzersizde, bir aracın çalıştırılmasından ÖNCE
+tetiklenen olayın adını yazarak bunu pekiştirin.
