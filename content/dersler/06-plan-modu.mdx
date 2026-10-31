@@ -4,6 +4,69 @@ baslik: "Plan Modu"
 bolum: gunluk-kullanim
 siraNo: 6
 ozet: "Değişiklik yapmadan önce plan modunda inceleme yapma."
-alistirmalar: []
+alistirmalar:
+  - id: plan-modu-komutu
+    gorev: "İzin modunu doğrudan 'plan' olarak ayarlamak için kullanılan komutu yaz"
+    kabulKurallari:
+      - "/permissions"
+    ipucu: "Ders 4'teki izin komutunu hatırla"
 ---
-İçerik yakında.
+
+## Plan modu neden var?
+
+Ders 4'te dört izin modundan bahsetmiştik: `default`, `acceptEdits`,
+`plan` ve `bypassPermissions`. Bu derste bunlardan birine, `plan`
+moduna, daha yakından bakacağız.
+
+`plan` modunun amacı basittir: Claude Code'un, istediğiniz işi
+yapmaya başlamadan önce bir plan sunmasını ve bu plan için
+onayınızı beklemesini sağlamak. Ders 4'te de belirtildiği gibi, bu
+modda Claude Code hiçbir değişiklik yapmaz; dosya düzenlemesi,
+yeni dosya oluşturma veya komut çalıştırma gibi eylemlerin hiçbiri
+sizden onay almadan gerçekleşmez. Claude Code yalnızca isteğinizi
+inceler, nasıl bir yol izleyeceğine dair bir plan sunar ve sizden bu
+planı onaylamanızı ister. Siz planı onayladıktan sonra Claude Code
+gerçek değişiklikleri yapmaya geçer.
+
+## Plan moduna girme
+
+Plan moduna girmenin yolu, Ders 4'te gördüğünüz mod değiştirme
+yöntemleriyle aynıdır: Ders 2'de bahsedilen `Shift+Tab` döngüsüyle
+modlar arasında ilerleyerek `plan` moduna ulaşabilirsiniz, veya
+`/permissions` komutunu kullanarak izin modunu doğrudan `plan` olarak
+ayarlayabilirsiniz. İkisi arasındaki fark şu: `Shift+Tab` modlar
+arasında sırayla döner, `/permissions` ise istediğiniz moda doğrudan
+geçmenizi sağlar.
+
+## Plan ne zaman sunulur?
+
+Plan modundayken bir istekte bulunduğunuzda, Claude Code isteğinizi
+değerlendirir ve bir plan sunar; bu planın onaylanmasını bekler.
+Planın tam olarak ekranda nasıl göründüğü kullandığınız sürüme göre
+değişebilir; burada önemli olan nokta, herhangi bir dosya veya komut
+üzerinde gerçek bir değişiklik yapılmadan önce size bir onay adımının
+sunulmasıdır.
+
+## Plan modu ne zaman kullanılır?
+
+Plan modu, özellikle riskli veya büyük çaplı değişikliklerden önce
+kullanışlıdır. Örneğin, birden fazla dosyayı etkileyecek bir
+yeniden yapılandırma (refactoring) isteğinde, ya da sonucunu tam
+olarak tahmin edemediğiniz bir komut isteğinde, önce Claude Code'un
+ne yapmayı planladığını görmek isteyebilirsiniz. Bu durumlarda plan
+moduna geçerek Claude Code'dan önce bir plan istemek, değişiklikler
+uygulanmadan önce onları gözden geçirme ve gerekirse isteğinizi
+netleştirme fırsatı verir.
+
+## Özet
+
+`plan` modu, Claude Code'un bir isteği yerine getirmeden önce bir
+plan sunmasını ve bu planın onaylanmasını beklemesini sağlayan izin
+modudur; onay verilmeden hiçbir dosya düzenlenmez, oluşturulmaz veya
+komut çalıştırılmaz. Bu moda Ders 2'deki `Shift+Tab` döngüsüyle veya
+Ders 4'teki `/permissions` komutuyla geçebilirsiniz; ikincisi, moda
+doğrudan geçmenizi sağlar. Riskli
+ya da büyük çaplı değişikliklerden önce plan modunu kullanmak,
+değişiklikler uygulanmadan onları görüp onaylama imkanı sağlar.
+Aşağıdaki egzersizde, izin modunu doğrudan `plan` olarak ayarlamak
+için kullanılan komutu yazarak bunu pekiştirin.
