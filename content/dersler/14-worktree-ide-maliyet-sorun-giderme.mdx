@@ -4,6 +4,128 @@ baslik: "Worktree'ler, IDE, Maliyet & Sorun Giderme"
 bolum: uzmanlik
 siraNo: 14
 ozet: "Worktree'ler, IDE entegrasyonu, maliyet takibi ve sorun giderme."
-alistirmalar: []
+alistirmalar:
+  - id: doctor-komutu
+    gorev: "Kurulum/yapılandırma sorunlarını teşhis eden komutu yaz"
+    kabulKurallari:
+      - "/doctor"
+    ipucu: "İngilizce 'doktor' kelimesi"
 ---
-İçerik yakında.
+
+## Son ders
+
+Kursun son dersine hoş geldiniz. Bu derse kadar Claude Code'u tek bir
+dizinde, terminal arayüzünde (TUI) tek bir oturum olarak kullandınız.
+Burada üç farklı konuyu ele alacağız: aynı anda birden fazla görev
+üzerinde çalışmayı kolaylaştıran git worktree'leri, Claude Code'u bir
+IDE içinden kullanma, ve maliyet takibi ile sorun gidermeye dair iki
+komutu (`/cost`, `/doctor`) daha yakından inceleyeceğiz.
+
+## Git worktree'ler ile paralel çalışma
+
+Normalde bir git deposunda aynı anda yalnızca bir dal (branch) üzerinde
+çalışırsınız: dal değiştirdiğinizde çalışma dizininizin içeriği de
+değişir. Git'in **worktree** özelliği, aynı deponun farklı dallarını
+aynı anda, birbirinden ayrı dizinlerde açık tutmanıza izin verir. Her
+worktree kendi dosya kopyasına ve kendi çalışma durumuna sahiptir; ama
+hepsi aynı git geçmişini paylaşır.
+
+Bu, Claude Code ile çalışırken özellikle kullanışlıdır: Claude Code'a
+bir worktree içinde bir görev verip, siz başka bir worktree'de (veya
+ana çalışma dizininizde) başka bir işle ilgilenebilirsiniz. İki çalışma
+birbirinin dosyalarına dokunmaz, çünkü her biri kendi izole dizininde
+ilerler. Örneğin bir worktree'de Claude Code'un büyük bir refactor
+yapmasını isteyebilir, aynı anda başka bir worktree'de küçük bir hata
+düzeltmesiyle ilgilenebilirsiniz; ikisi de aynı depodan türediği için
+sonunda çalışmaları normal git akışıyla (dal birleştirme, push gibi)
+bir araya getirebilirsiniz.
+
+Bu dersin kapsamında önemli olan nokta, worktree'lerin tam komut
+söz dizimini ezberlemeniz değil; genel prensibi anlamanızdır: git
+worktree'ler, aynı projede birden fazla bağımsız çalışma hattını aynı
+anda, birbirini bozmadan sürdürmenin bir yoludur ve Claude Code bu
+izole dizinlerin her birinde ayrı bir oturum olarak çalışabilir.
+
+## IDE entegrasyonu
+
+Şimdiye kadar Claude Code'u saf bir terminal programı olarak ele
+aldık. Ancak Claude Code, VS Code ve JetBrains ailesindeki (IntelliJ,
+WebStorm, PyCharm gibi) editörlerle de entegre çalışabilir. Bu
+entegrasyon, editörünüzün içinden bir panel veya pencere açarak
+Claude Code'un terminal arayüzüne (TUI) erişmenizi sağlar; editörünüzde
+açık olan dosyaları ve seçimleri Claude Code'un görmesini kolaylaştırır,
+Claude Code'un önerdiği değişiklikleri editörün kendi diff görünümünde
+incelemenize yardımcı olur.
+
+Burada vurgulanması gereken şey şudur: bu entegrasyon Claude Code'u
+farklı bir araca dönüştürmez. Siz hâlâ aynı REPL ile, aynı slash
+komutlarıyla, aynı araçlarla çalışırsınız — entegrasyon sadece bu
+deneyimi editörünüzün penceresine taşır ve editörle dosya/seçim
+düzeyinde bir bağlantı kurar. Kurulum adımları ve tam özellik seti
+editöre ve Claude Code sürümüne göre değişebileceğinden, burada
+bunları ezberlemek yerine entegrasyonun ne işe yaradığını bilmeniz
+yeterlidir: zaten kullandığınız editörden çıkmadan Claude Code'a
+erişebilme imkânı.
+
+## `/cost` ile maliyeti derinlemesine takip etmek
+
+Ders 5'te `/cost` komutunu, "o oturumda harcanan token miktarının ve
+buna karşılık gelen maliyetin bir özetini" gösteren komut olarak
+tanımlamıştık. Bu tanım hâlâ geçerli; burada bunu biraz daha
+derinleştirelim.
+
+Claude Code'a verdiğiniz her istek ve aldığınız her yanıt, bir miktar
+token tüketir; context'e eklenen dosya içerikleri, araç çağrılarının
+sonuçları ve konuşma geçmişinin kendisi de bu tüketime dahildir.
+`/cost` komutu, bu tüketimi tek tek işlem bazında değil, oturumun
+tamamı için toplu bir özet olarak gösterir. Yani bir oturumda çok
+sayıda dosya okuttuysanız, uzun bir konuşma geçmişi biriktirdiyseniz
+veya büyük context'li bir subagent çalıştırdıysanız, bunların hepsinin
+toplam etkisini `/cost` çıktısında görürsünüz.
+
+Bu bilginin pratik değeri şudur: uzun süren veya çok dosya okuyan bir
+oturumda maliyetin nereye gittiğini merak ettiğinizde, ya da bir
+görevi `/clear` veya `/compact` ile sıfırlamadan önce o ana kadarki
+harcamayı görmek istediğinizde `/cost`'a başvurursunuz. Tam olarak
+hangi sayıların ve alanların gösterildiği, kullandığınız plan ve
+Claude Code sürümüne göre değişebilir; burada önemli olan, `/cost`'un
+oturum düzeyinde bir maliyet/token özeti sunan komut olduğunu
+bilmenizdir.
+
+## `/doctor` ile kurulum sorunlarını teşhis etmek
+
+Ders 5'te `/doctor` komutunu kısaca "Claude Code kurulumunuzu teşhis
+eder" diye tanımlamıştık; bu da hâlâ geçerli. `/doctor`, aklınıza bir
+insan doktoru muayenesi gibi gelebilir: komutu çalıştırdığınızda
+Claude Code, kendi kurulumunu ve yapılandırmasını kontrol eder ve
+olası sorunları raporlar.
+
+`/doctor`'a başvurmanız gereken tipik durum, Claude Code'un beklediğiniz
+gibi davranmadığı, bir ayarın etkisini göstermediği veya bir özelliğin
+çalışmadığından şüphelendiğiniz andır. Örneğin bir MCP sunucusu
+beklediğiniz gibi görünmüyorsa, bir hook tetiklenmiyorsa veya genel
+olarak "kurulumumda bir şey mi bozuk?" sorusunu sorduğunuzda `/doctor`
+çalıştırmak, sorunun kaynağını kurulum/yapılandırma tarafında mı yoksa
+başka bir yerde mi aramanız gerektiğini anlamanıza yardımcı olur.
+Tam olarak hangi kontrolleri yaptığı ve çıktının tam biçimi sürüme göre
+değişebilir; burada bilmeniz gereken, `/doctor`'un kurulum ve
+yapılandırma sorunlarını teşhis etmeye yarayan komut olduğudur.
+
+## Özet
+
+Bu derste üç konuyu ele aldık. Git worktree'ler, aynı depoda birden
+fazla bağımsız çalışma hattını izole dizinlerde aynı anda sürdürmenizi
+ve Claude Code'u bu dizinlerin her birinde ayrı bir oturum olarak
+çalıştırmanızı sağlar. VS Code ve JetBrains gibi editörlerle entegrasyon,
+aynı Claude Code deneyimini (REPL, slash komutları, araçlar) editörün
+penceresine taşır ve açık dosyalarla bağlantı kurar. `/cost`, oturumun
+tamamı için toplu bir token/maliyet özeti verir; `/doctor` ise kurulum
+ve yapılandırma sorunlarını teşhis eder. Aşağıdaki egzersizde, kurulum
+sorunlarını teşhis eden komutu yazarak bunu pekiştirin.
+
+Bu dersle birlikte kursun on dört dersi de tamamlandı. Kurulumdan
+başlayıp REPL'i, araçları ve izinleri, slash komutlarını, plan modunu,
+context yönetimini, CLAUDE.md'yi, özel komutları, subagent'ları,
+hook'ları, MCP sunucularını, headless modu ve son olarak worktree'ler
+ile IDE entegrasyonunu gördünüz. Buradan sonrası, bu temelleri kendi
+projelerinizde kullanarak pratiğe dökmek.
