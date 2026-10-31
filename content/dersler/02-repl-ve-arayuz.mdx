@@ -4,6 +4,95 @@ baslik: "REPL ve Arayüz"
 bolum: temeller
 siraNo: 2
 ozet: "Claude Code'un terminal arayüzünü ve REPL döngüsünü tanıma."
-alistirmalar: []
+alistirmalar:
+  - id: iptal-kisayolu
+    gorev: "Oturumu/komutu iptal etmek için kullanılan kısayolu yaz"
+    kabulKurallari:
+      - "Ctrl+C"
+      - "Ctrl-C"
+      - "^C"
+    ipucu: "Terminal programlarında evrensel 'kes' kısayolu"
 ---
-İçerik yakında.
+
+## REPL nedir?
+
+Önceki derste `claude` komutunu çalıştırdığınızda ekranda bir yazım
+alanının açıldığını gördünüz. Bu alan, klasik bir kabuk (shell) değil;
+"REPL" denen bir döngü üzerinde çalışır. REPL, "Read-Eval-Print Loop"
+sözcüklerinin kısaltmasıdır: program mesajınızı okur (read), onu
+değerlendirir (eval), bir sonuç üretir ve bunu ekrana yazar (print) —
+sonra tekrar sizden bir mesaj bekleyerek bu döngüyü (loop) sürdürür.
+Claude Code'da bu döngü şu şekilde işler: siz bir mesaj yazarsınız,
+Claude Code bunu okur, gerekirse dosyalarınızı inceler ya da komut
+çalıştırır, yanıtını terminale yazar ve ardından yeniden sizden bir
+mesaj bekler. Oturumu siz kapatana kadar bu döngü devam eder.
+
+## Ekranın genel yapısı
+
+Claude Code'un terminal arayüzü (TUI — "Terminal User Interface"), genel
+olarak birkaç bölgeden oluşur:
+
+- **Mesaj geçmişi**: Ekranın büyük bölümünü kaplar ve sizin yazdığınız
+  mesajlarla Claude'un yanıtlarını, zaman sırasına göre yukarıdan aşağıya
+  doğru gösterir. Yeni her mesaj ve yanıt, bu geçmişin altına eklenir.
+- **Girdi kutusu**: Genellikle ekranın en altına yakın bir yerde, yeni
+  mesajınızı yazdığınız satırdır. İmleç burada bekler; yazdıklarınız
+  `Enter` tuşuna basana kadar gönderilmez.
+- **Durum çubuğu**: Girdi kutusunun etrafında ya da altında, o anki
+  oturumla ilgili kısa bilgiler görülür (örneğin hangi izin modunda
+  olduğunuz gibi göstergeler). Bu alanın tam içeriği sürüme göre
+  değişebilir; burada önemli olan, böyle bir bilgi alanının genellikle
+  var olduğunu bilmenizdir.
+
+Bu üç bölge bir arada, "yazdığınız şeyi görürsünüz, geçmişi görürsünüz,
+oturumla ilgili özet bilgiyi görürsünüz" düzenini oluşturur — çoğu
+etkileşimli terminal programında karşılaşacağınız tanıdık bir düzen.
+
+## Temel klavye kısayolları
+
+Claude Code ile çalışırken sık kullanacağınız birkaç klavye kısayolu
+vardır:
+
+### Ctrl+C — iptal / çıkış
+
+`Ctrl+C`, terminal programlarında neredeyse evrensel olan "kes" (iptal)
+kısayoludur. Claude Code'da da aynı amaca hizmet eder: o anda süren bir
+işlemi durdurmak veya oturumdan çıkmak istediğinizde kullanılır. Bu,
+bu dersin egzersizinde de karşınıza çıkacak, üzerinde en çok durmanız
+gereken kısayoldur.
+
+### Ctrl+R — geçmişte arama
+
+`Ctrl+R`, tipik olarak mesaj geçmişinizde arama yapmak için kullanılır;
+daha önce yazdığınız bir mesajı yeniden bulmak istediğinizde işe yarar.
+Bu, birçok terminal programında (örneğin kabuğunuzun komut geçmişinde
+kullanılan ters arama) karşılaşabileceğiniz, benzer amaçlı, yaygın bir
+kısayol kalıbıdır.
+
+### Shift+Tab — izin modu döngüsü
+
+`Shift+Tab`, Claude Code'un "izin modu" arasında geçiş yapmanızı sağlar.
+İzin modu, Claude Code'un dosya değiştirme veya komut çalıştırma gibi
+eylemler için sizden ne sıklıkla onay isteyeceğini belirler. `Shift+Tab`
+tuşuna bastığınızda mod tipik olarak şu sıralamada döner: normal mod →
+otomatik-kabul modu → plan modu → (yeniden normal). İzinler ve plan modu
+konuları sonraki derslerde ayrıntılı olarak ele alınacak; burada sadece
+bu geçişin `Shift+Tab` ile yapıldığını bilmeniz yeterli.
+
+### Çoklu satır girdi
+
+Girdi kutusuna normalde yazdığınız her satırı `Enter` ile gönderirsiniz.
+Ama bazen mesajınızın birden fazla satırdan oluşmasını, hepsinin aynı
+mesajın parçası olmasını istersiniz (örneğin bir kod parçası yapıştırmak
+için). Bunun için genellikle satırın sonuna `\` karakteri eklenir ya da
+`Option/Alt+Enter` tuş birleşimi kullanılır; her iki yöntem de mesajı
+göndermeden yeni bir satıra geçmenizi sağlar. Mesajınız tamamlanıp
+göndermeye hazır olduğunuzda, normal `Enter` tuşuna basmanız yeterlidir.
+
+## Özet
+
+Claude Code'un arayüzü; mesaj geçmişi, girdi kutusu ve durum bilgisini bir
+arada gösteren bir REPL döngüsüdür. Bu döngüyü yönetmek için en önemli
+kısayol `Ctrl+C`'dir — bir işlemi iptal etmek ya da oturumdan çıkmak
+istediğinizde her zaman elinizin altındadır. Aşağıdaki egzersizle bu
+kısayolu pekiştirin.
