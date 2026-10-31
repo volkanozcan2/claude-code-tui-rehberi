@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Link from "next/link";
 import ThemeToggle from "@/components/ThemeToggle";
 import "./globals.css";
 
@@ -29,7 +30,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <header className="flex justify-end p-4">
+        <header className="relative z-50 flex items-center justify-between p-4">
+          <Link href="/" className="text-sm font-semibold text-fg hover:text-accent">
+            Claude Code TUI Rehberi
+          </Link>
           <ThemeToggle />
         </header>
         {children}

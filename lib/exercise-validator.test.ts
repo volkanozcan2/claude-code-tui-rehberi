@@ -20,4 +20,7 @@ describe('cevapEslesiyorMu', () => {
   it('boş girdi için false döner', () => {
     expect(cevapEslesiyorMu('', ['/compact'])).toBe(false);
   });
+  it('bozuk (geçersiz) regex kuralı hata fırlatmaz, false döner', () => {
+    expect(cevapEslesiyorMu('/compact', ['re:(eksik-parantez'])).toBe(false);
+  });
 });

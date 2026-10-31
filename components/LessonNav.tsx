@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { getBolumBaslik } from '@/lib/bolumler';
 import type { Bolum, Ders } from '@/lib/types';
@@ -33,13 +33,28 @@ export default function LessonNav({ dersler, aktifSlug }: LessonNavProps) {
   const [acik, setAcik] = useState(false);
   const gruplar = dersleriBolumeGoreGrupla(dersler);
 
+  useEffect(() => {
+    if (!acik) {
+      return;
+    }
+
+    function tusDinleyici(olay: KeyboardEvent) {
+      if (olay.key === 'Escape') {
+        setAcik(false);
+      }
+    }
+
+    document.addEventListener('keydown', tusDinleyici);
+    return () => document.removeEventListener('keydown', tusDinleyici);
+  }, [acik]);
+
   return (
     <>
       <button
         type="button"
         onClick={() => setAcik((onceki) => !onceki)}
         aria-expanded={acik}
-        className="rounded-full border border-card-border bg-card-bg px-3 py-1.5 text-sm text-fg md:hidden"
+        className="relative z-50 rounded-full border border-card-border bg-card-bg px-3 py-1.5 text-sm text-fg md:hidden"
       >
         Menü
       </button>
@@ -49,6 +64,13 @@ export default function LessonNav({ dersler, aktifSlug }: LessonNavProps) {
           acik ? 'open block' : 'hidden'
         }`}
       >
+        <button
+          type="button"
+          onClick={() => setAcik(false)}
+          className="mb-4 rounded-full border border-card-border bg-card-bg px-3 py-1.5 text-sm text-fg md:hidden"
+        >
+          ✕ Kapat
+        </button>
         {gruplar.map(([bolum, bolumDersleri]) => (
           <div key={bolum} className="mb-4">
             <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-fg/70">

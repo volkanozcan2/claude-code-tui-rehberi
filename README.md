@@ -36,9 +36,11 @@ adresinde açılır.
 
 ## Statik Export (Production Build)
 
-Proje tamamen statik export uyumludur; bu sayede Vercel, Netlify veya
-GitHub Pages gibi herhangi bir statik barındırma hizmetine değişiklik
-yapmadan deploy edilebilir:
+Proje tamamen statik export uyumludur; bu sayede Vercel, Netlify gibi
+hizmetlere veya bir GitHub Pages kullanıcı/organizasyon kök sitesine
+değişiklik yapmadan deploy edilebilir (bir GitHub Pages *proje* sitesi
+`/<repo-adı>/` alt yolunda sunulduğundan, orada ek olarak `basePath`/
+`assetPrefix` yapılandırması gerekir — bu depoda henüz ayarlı değildir):
 
 ```bash
 npm run build

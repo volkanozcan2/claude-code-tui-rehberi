@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { Alistirma } from '@/lib/types';
 import { cevapEslesiyorMu } from '@/lib/exercise-validator';
-import { alistirmaTamamlandiIsaretle } from '@/lib/progress';
+import { alistirmaTamamlandiIsaretle, alistirmaTamamlandiMi } from '@/lib/progress';
 
 interface TerminalSimulatorProps {
   dersSlug: string;
@@ -32,6 +32,16 @@ function AlistirmaTerminali({
   const [girdi, setGirdi] = useState('');
   const [durum, setDurum] = useState<Durum>('bekliyor');
 
+  // Egzersiz daha önce (örn. önceki bir ziyarette) tamamlanmış olarak
+  // işaretlenmişse, sayfa yeniden açıldığında "çözülmüş" durumunu göster.
+  // Statik export altında bu bilgi yalnızca tarayıcıda (mount sonrası)
+  // localStorage'dan okunabilir; bu yüzden useEffect kullanılır.
+  useEffect(() => {
+    if (alistirmaTamamlandiMi(dersSlug, alistirma.id)) {
+      setDurum('basarili');
+    }
+  }, [dersSlug, alistirma.id]);
+
   function kontrolEt() {
     if (girdi.trim() === '') {
       return;
@@ -45,10 +55,15 @@ function AlistirmaTerminali({
     }
   }
 
+  function gonderimiIsle(olay: React.FormEvent<HTMLFormElement>) {
+    olay.preventDefault();
+    kontrolEt();
+  }
+
   return (
     <div className="rounded-lg border border-card-border bg-card-bg p-4 font-mono text-sm text-fg">
       <p className="mb-3">{alistirma.gorev}</p>
-      <div className="flex items-center gap-2">
+      <form className="flex items-center gap-2" onSubmit={gonderimiIsle}>
         <span aria-hidden="true" className="text-accent">
           $
         </span>
@@ -60,13 +75,12 @@ function AlistirmaTerminali({
           className="flex-1 rounded border border-card-border bg-transparent px-2 py-1 text-fg outline-none focus:border-accent"
         />
         <button
-          type="button"
-          onClick={kontrolEt}
+          type="submit"
           className="rounded border border-card-border px-3 py-1 text-fg transition-colors hover:border-accent"
         >
           Kontrol Et
         </button>
-      </div>
+      </form>
       {durum === 'basarili' && (
         <p className="mt-3 text-green-600 dark:text-green-400">
           ✓ Doğru{alistirma.basariliMesaj ? ` — ${alistirma.basariliMesaj}` : ''}

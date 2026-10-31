@@ -16,6 +16,15 @@ export default {
         "card-bg": "var(--card-bg)",
         "card-border": "var(--card-border)",
       },
+      fontFamily: {
+        sans: ["var(--font-geist-sans)", "Arial", "Helvetica", "sans-serif"],
+        mono: [
+          "var(--font-geist-mono)",
+          "ui-monospace",
+          "SFMono-Regular",
+          "monospace",
+        ],
+      },
     },
   },
   plugins: [],

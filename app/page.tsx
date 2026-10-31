@@ -1,6 +1,5 @@
-import ModuleCard from '@/components/ModuleCard';
-import { getAllDersler, getBolumBaslik } from '@/lib/dersler';
-import { dersTamamlanmaOrani, genelIlerleme } from '@/lib/progress';
+import { GenelIlerlemeRozeti, ModulKartlari } from '@/components/HomeProgress';
+import { getAllDersler } from '@/lib/dersler';
 import type { Bolum, Ders } from '@/lib/types';
 
 const BOLUM_SIRASI: Bolum[] = ['temeller', 'gunluk-kullanim', 'ileri-duzey', 'uzmanlik'];
@@ -30,7 +29,6 @@ function dersleriBolumeGoreGrupla(dersler: Ders[]): Array<[Bolum, Ders[]]> {
 export default function HomePage() {
   const dersler = getAllDersler();
   const gruplar = dersleriBolumeGoreGrupla(dersler);
-  const genelYuzde = Math.round(genelIlerleme(dersler) * 100);
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
@@ -42,29 +40,10 @@ export default function HomePage() {
           Terminal tabanlı yapay zeka kodlama asistanı Claude Code&apos;u
           günlük iş akışınıza katmak için adım adım, Türkçe bir kurs.
         </p>
-        <span className="inline-block rounded-full border border-card-border bg-card-bg px-4 py-1.5 text-sm font-medium text-accent">
-          Genel ilerleme: %{genelYuzde}
-        </span>
+        <GenelIlerlemeRozeti tumDersler={dersler} />
       </header>
 
-      <main>
-        {gruplar.map(([bolum, bolumDersleri]) => (
-          <section key={bolum} className="mb-10">
-            <h2 className="mb-4 text-xl font-semibold text-fg">
-              {getBolumBaslik(bolum)}
-            </h2>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {bolumDersleri.map((ders) => (
-                <ModuleCard
-                  key={ders.slug}
-                  ders={ders}
-                  ilerlemeOrani={dersTamamlanmaOrani(ders.slug, ders.alistirmalar.length)}
-                />
-              ))}
-            </div>
-          </section>
-        ))}
-      </main>
+      <ModulKartlari gruplar={gruplar} />
     </div>
   );
 }

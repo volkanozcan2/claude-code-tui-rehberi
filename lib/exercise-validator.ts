@@ -26,7 +26,13 @@ export function cevapEslesiyorMu(girdi: string, kabulKurallari: string[]): boole
   return kabulKurallari.some((kural) => {
     if (kural.startsWith(REGEX_PREFIX)) {
       const pattern = kural.slice(REGEX_PREFIX.length);
-      return new RegExp(pattern).test(girdi);
+      try {
+        return new RegExp(pattern).test(girdi);
+      } catch {
+        // Bozuk/geçersiz regex kuralı: hata fırlatmak yerine bu kuralı
+        // eşleşmiyor say, diğer kurallar denenmeye devam etsin.
+        return false;
+      }
     }
     return normalizedGirdi === normalize(kural);
   });

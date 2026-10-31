@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import LessonNav from '@/components/LessonNav';
@@ -15,6 +16,19 @@ interface LessonPageProps {
 
 export async function generateStaticParams(): Promise<LessonPageParams[]> {
   return getAllDersler().map((ders) => ({ slug: ders.slug }));
+}
+
+export async function generateMetadata({ params }: LessonPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const ders = getDersBySlug(slug);
+
+  if (!ders) {
+    return {};
+  }
+
+  return {
+    title: `${ders.baslik} — Claude Code TUI Rehberi`,
+  };
 }
 
 export default async function LessonPage({ params }: LessonPageProps) {

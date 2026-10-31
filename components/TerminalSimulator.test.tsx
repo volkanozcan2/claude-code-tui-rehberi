@@ -32,3 +32,18 @@ it('doğru girdide başarıyı gösterir ve ilerlemeyi işaretler', () => {
   expect(screen.getByText(/doğru/i)).toBeInTheDocument();
   expect(localStorage.getItem('cc-tui-ilerleme')).toContain('a1');
 });
+
+it('Enter tuşuna basılıp form submit edildiğinde de cevabı kontrol eder', () => {
+  render(<TerminalSimulator dersSlug="test-ders" alistirmalar={[alistirma]} />);
+  fireEvent.change(screen.getByRole('textbox'), { target: { value: '/compact' } });
+  const form = screen.getByRole('textbox').closest('form');
+  expect(form).not.toBeNull();
+  fireEvent.submit(form!);
+  expect(screen.getByText(/doğru/i)).toBeInTheDocument();
+});
+
+it('egzersiz localStorage’da tamamlanmış olarak işaretliyse, mount olduğunda başarı durumunu gösterir', () => {
+  localStorage.setItem('cc-tui-ilerleme', JSON.stringify({ 'test-ders': ['a1'] }));
+  render(<TerminalSimulator dersSlug="test-ders" alistirmalar={[alistirma]} />);
+  expect(screen.getByText(/doğru/i)).toBeInTheDocument();
+});

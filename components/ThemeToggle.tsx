@@ -7,14 +7,25 @@ const STORAGE_KEY = 'cc-tui-tema';
 type Tema = 'acik' | 'koyu';
 
 function depolananTemaOkuyEylemBasinda(): Tema {
-  const depolanan = window.localStorage.getItem(STORAGE_KEY);
-  if (depolanan === 'acik' || depolanan === 'koyu') {
-    return depolanan;
+  try {
+    const depolanan = window.localStorage.getItem(STORAGE_KEY);
+    if (depolanan === 'acik' || depolanan === 'koyu') {
+      return depolanan;
+    }
+  } catch {
+    // localStorage kullanılamıyorsa (örn. gizli mod kotası) sessizce yok say
+    // ve prefers-color-scheme tercihine düş.
   }
-  const koyuTercihEdiliyor =
-    typeof window.matchMedia === 'function' &&
-    window.matchMedia('(prefers-color-scheme: dark)').matches;
-  return koyuTercihEdiliyor ? 'koyu' : 'acik';
+
+  try {
+    const koyuTercihEdiliyor =
+      typeof window.matchMedia === 'function' &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches;
+    return koyuTercihEdiliyor ? 'koyu' : 'acik';
+  } catch {
+    // matchMedia da başarısız olursa güvenli varsayılan: açık tema.
+    return 'acik';
+  }
 }
 
 function temayiUygula(tema: Tema) {
@@ -34,7 +45,12 @@ export default function ThemeToggle() {
     const yeniTema: Tema = tema === 'koyu' ? 'acik' : 'koyu';
     setTema(yeniTema);
     temayiUygula(yeniTema);
-    window.localStorage.setItem(STORAGE_KEY, yeniTema);
+    try {
+      window.localStorage.setItem(STORAGE_KEY, yeniTema);
+    } catch {
+      // localStorage kullanılamıyorsa (örn. gizli mod kotası) sessizce yok
+      // say; tema bu oturum için yine de bellek içinde değişmiş olur.
+    }
   }
 
   return (

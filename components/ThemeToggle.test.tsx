@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { it, expect, beforeEach } from 'vitest';
+import { it, expect, beforeEach, vi } from 'vitest';
 import ThemeToggle from './ThemeToggle';
 
 beforeEach(() => {
@@ -21,4 +21,20 @@ it('ikinci tıklama açık moda geri döner', () => {
   fireEvent.click(btn);
   expect(document.documentElement.classList.contains('dark')).toBe(false);
   expect(localStorage.getItem('cc-tui-tema')).toBe('acik');
+});
+
+it('localStorage erişimi hata fırlatsa bile çökmeden render edilir ve tıklanabilir', () => {
+  const getItemSpy = vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
+    throw new Error('gizli mod kotası');
+  });
+  const setItemSpy = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+    throw new Error('gizli mod kotası');
+  });
+
+  expect(() => render(<ThemeToggle />)).not.toThrow();
+  const btn = screen.getByRole('button');
+  expect(() => fireEvent.click(btn)).not.toThrow();
+
+  getItemSpy.mockRestore();
+  setItemSpy.mockRestore();
 });
