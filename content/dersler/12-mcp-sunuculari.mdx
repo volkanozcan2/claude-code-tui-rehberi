@@ -4,6 +4,83 @@ baslik: "MCP Sunucuları"
 bolum: ileri-duzey
 siraNo: 12
 ozet: "MCP sunucularını bağlayarak araç setini genişletme."
-alistirmalar: []
+alistirmalar:
+  - id: mcp-komutu
+    gorev: "Bağlı MCP sunucularını listeleyen slash komutunu yaz"
+    kabulKurallari:
+      - "/mcp"
+    ipucu: "Protokolün kısaltmasıyla aynı"
 ---
-İçerik yakında.
+
+## Claude Code'un araç setinin sınırı yok
+
+Şimdiye kadar gördüğünüz araçlar — dosya okuma/yazma, komut
+çalıştırma, Task ile subagent'lara iş devretme (Ders 10) — Claude
+Code'un kendisiyle birlikte gelen, yerleşik araçlardı. Ama bazı
+işler, Claude Code'un kendi başına bilmediği dış sistemlere erişim
+gerektirir: bir veritabanındaki kayıtları sorgulamak, bir proje
+yönetim aracındaki görevleri okumak, bir tasarım dosyasındaki
+içeriğe bakmak gibi. Bu gibi dış araçları ve veri kaynaklarını
+Claude Code'a bağlamanın yolu **MCP sunucuları**dır.
+
+## MCP nedir
+
+MCP, **Model Context Protocol** (Model Bağlam Protokolü) kısaltmasıdır.
+Dış araçların ve veri kaynaklarının bir modele nasıl bağlanacağını
+tanımlayan bir protokoldür; bu protokole uyan her bir bağlantı noktası
+bir **MCP sunucusu** olarak adlandırılır. Bir MCP sunucusuna
+bağlandığınızda, o sunucunun sunduğu araçlar ve veriler, tıpkı
+Claude Code'un yerleşik araçları gibi, konuşma akışı içinde
+kullanılabilir hale gelir.
+
+Bunun pratikte anlamı şudur: Claude Code'un "bilgisi" ve "yapabilecekleri",
+yerleşik araçlarla sınırlı değildir. Bir MCP sunucusu bağlayarak,
+Claude Code'un erişebileceği dış araç ve veri kaynaklarının setini
+genişletebilirsiniz — kendi ihtiyaçlarınıza göre, projeden projeye
+değişebilecek şekilde.
+
+## `claude mcp add` — bir sunucu bağlamak
+
+Bir MCP sunucusunu Claude Code'a bağlamak için `claude mcp add`
+komutu kullanılır. Bu komutu terminale yazarak çalıştırırsınız;
+komut, belirttiğiniz sunucuyu Claude Code'un yapılandırmasına ekler
+ve o andan sonra o sunucunun sağladığı araçlar, konuşma akışında
+Claude Code tarafından kullanılabilir olur.
+
+Tam olarak hangi sunucunun ekleneceği ve nasıl yapılandırılacağı,
+sunucudan sunucuya değişir; bu derste tek tek sunucu örneklerine
+girmiyoruz. Önemli olan genel akıştır: `claude mcp add` ile bir dış
+araç/veri kaynağını Claude Code'a tanıtırsınız, Claude Code da o
+noktadan sonra bu kaynağı kendi araç setinin bir parçası gibi
+kullanabilir.
+
+## `/mcp` — bağlı sunucuları görüntülemek
+
+Bir veya daha fazla MCP sunucusu bağladıktan sonra, hangi
+sunucuların şu an bağlı olduğunu görmek isteyebilirsiniz. Bunun için
+`/mcp` slash komutu kullanılır. `/mcp` yazıp çalıştırdığınızda,
+Claude Code o oturumda bağlı olan MCP sunucularının listesini
+gösterir.
+
+Bu komut, özellikle birden fazla sunucu eklediğiniz projelerde
+faydalıdır: bir aracı neden kullanamadığınızı anlamaya çalışırken,
+ilgili sunucunun gerçekten bağlı olup olmadığını `/mcp` ile hızlıca
+doğrulayabilirsiniz.
+
+## Neden önemli
+
+MCP sunucuları, Claude Code'u "kapalı bir kutu" olmaktan çıkarır.
+Yerleşik araçlar genel amaçlı işler için yeterlidir, ama her ekibin,
+her projenin kendine özgü dış sistemleri vardır. MCP sayesinde bu
+dış sistemleri — ki hangileri olduğu projeden projeye değişir — kendi
+ihtiyacınıza göre Claude Code'a bağlayabilir, Claude Code'un o
+sistemler üzerinde de sizin adınıza çalışmasını sağlayabilirsiniz.
+
+## Özet
+
+Bu derste MCP (Model Context Protocol) sunucularının ne olduğunu ve
+dış araçları/veri kaynaklarını Claude Code'a nasıl bağladığını
+gördünüz. `claude mcp add` komutuyla terminalden bir sunucu
+eklenebildiğini, `/mcp` slash komutuyla da o oturumda bağlı olan
+sunucuların listelenebildiğini öğrendiniz. Aşağıdaki egzersizde, bağlı
+MCP sunucularını listeleyen slash komutunu yazarak bunu pekiştirin.
