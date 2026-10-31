@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import LessonPage, { generateStaticParams } from './page';
 
@@ -25,5 +25,14 @@ describe('LessonPage', () => {
     await expect(
       LessonPage({ params: Promise.resolve({ slug: 'yok-boyle-bir-sey' }) })
     ).rejects.toThrow();
+  });
+
+  it('ders 1 iki egzersizi de içerir ve ikinci egzersiz npm i kısaltmasını da kabul eder', async () => {
+    const el = await LessonPage({ params: Promise.resolve({ slug: 'kurulum-ilk-calistirma' }) });
+    render(el as React.ReactElement);
+    const inputs = screen.getAllByRole('textbox');
+    fireEvent.change(inputs[0], { target: { value: 'npm i -g @anthropic-ai/claude-code' } });
+    fireEvent.click(screen.getAllByRole('button', { name: /kontrol et/i })[0]);
+    expect(screen.getAllByText(/doğru/i).length).toBeGreaterThan(0);
   });
 });

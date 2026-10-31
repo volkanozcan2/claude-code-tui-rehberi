@@ -4,6 +4,88 @@ baslik: "Kurulum & İlk Çalıştırma"
 bolum: temeller
 siraNo: 1
 ozet: "Claude Code'u kurup ilk kez çalıştırma."
-alistirmalar: []
+alistirmalar:
+  - id: npm-kurulum
+    gorev: "Claude Code'u global olarak kuran npm komutunu yaz"
+    kabulKurallari:
+      - "npm install -g @anthropic-ai/claude-code"
+      - "npm i -g @anthropic-ai/claude-code"
+    ipucu: "npm install -g <paket-adı> biçiminde bir komut"
+  - id: claude-baslat
+    gorev: "Kurulduktan sonra Claude Code'u başlatan komutu yaz"
+    kabulKurallari:
+      - "claude"
+    ipucu: "Paketin kendi adını tek kelime olarak çalıştır"
 ---
-İçerik yakında.
+
+## Claude Code nedir?
+
+Claude Code, Anthropic'in geliştirdiği, terminalde çalışan bir yapay zeka
+programlama asistanıdır. Bir masaüstü uygulaması ya da tarayıcı eklentisi
+değildir; mevcut terminalinizin içinde, komut satırıyla aynı yerde çalışır.
+Ona doğal dilde ne yapmak istediğinizi yazarsınız — "bu fonksiyonu test et",
+"bu hatayı bul ve düzelt", "bu dosyayı özetle" gibi — ve Claude Code sizin
+adınıza dosyaları okur, kod yazar, komut çalıştırır ve sonucu size terminalde
+gösterir.
+
+Bu dersin amacı Claude Code'u bilgisayarınıza kurmak, bir proje klasöründe
+ilk kez çalıştırmak ve ona ilk mesajınızı göndermektir. Önceden Claude Code
+kullanmış olmanız gerekmiyor — sadece bir terminal açıp komut çalıştırabiliyor
+olmanız yeterli.
+
+## Kurulum
+
+Claude Code, npm üzerinden global bir paket olarak dağıtılır. Terminalinizde
+şu komutu çalıştırarak kurun:
+
+```
+npm install -g @anthropic-ai/claude-code
+```
+
+Komut bittiğinde `claude` adlı yeni bir komut, sisteminizde global olarak
+kullanılabilir hale gelir. Kurulumun başarılı olup olmadığını merak
+ediyorsanız, bir sonraki adımda zaten `claude` komutunu çalıştırarak bunu
+doğrulayacaksınız.
+
+## İlk çalıştırma
+
+Claude Code, çalıştırıldığı klasörü "proje" olarak ele alır; o klasördeki
+dosyaları görür ve üzerinde çalışır. Bu yüzden önce terminalde üzerinde
+çalışmak istediğiniz proje klasörüne geçin, ardından Claude Code'u orada
+başlatın:
+
+```
+cd proje-klasorum
+claude
+```
+
+`claude` komutu çalıştığında terminal ekranınızda Claude Code'un kendi
+arayüzü açılır — bu, komut girdiğiniz normal kabuk değil, mesaj yazıp
+Claude'un yanıtlarını okuduğunuz etkileşimli bir döngüdür (buna REPL denir;
+bir sonraki derste ayrıntılı olarak ele alınır).
+
+## İlk giriş: hesabınızı bağlama
+
+Claude Code'u bilgisayarınızda ilk defa çalıştırdığınızda, önce hesabınızı
+bağlamanız istenir. Bu adım `/login` komutuyla tetiklenir ve ekrandaki
+yönergeleri izleyerek tarayıcınız üzerinden hesabınızla oturum açmanızı
+sağlar. Oturum açma tamamlandığında Claude Code, mesajlarınızı kabul etmeye
+hazır hale gelir ve bu adımı bir daha tekrarlamanız gerekmez.
+
+## İlk mesajı yazmak
+
+Hesabınız bağlandıktan sonra, ekranda yanıp sönen bir giriş satırı
+görürsünüz. Buraya normal bir cümle gibi ne istediğinizi yazabilirsiniz,
+örneğin:
+
+```
+> Bu klasördeki dosyaları listele ve bana kısaca ne iş yaptığını anlat
+```
+
+Mesajınızı yazdıktan sonra `Enter` tuşuna basarak gönderirsiniz. Claude Code
+mesajınızı işler, gerekirse dosyalarınızı okur ve yanıtını terminalde
+aşağıya doğru akan metin olarak gösterir.
+
+Bu kadar — Claude Code artık kurulu, çalışıyor ve sizden gelecek bir sonraki
+mesajı bekliyor. Aşağıdaki egzersizlerle bugün öğrendiğiniz iki komutu
+pekiştirin.
