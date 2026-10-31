@@ -1,36 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Claude Code TUI Rehberi
 
-## Getting Started
+Claude Code'un terminalde çalışan TUI (metin arayüzü) sürümünü sıfırdan,
+en ince ayrıntısına kadar öğreten, Türkçe dilinde, egzersizli bir eğitim
+sitesi. Kurulumdan başlayıp REPL/klavye kısayolları, izin modları, slash
+komutları, plan modu, context/compaction, `CLAUDE.md` ve proje hafızası,
+custom komutlar, subagent'lar, hook'lar, MCP sunucuları, headless/script
+modu, worktree'ler, IDE entegrasyonu ve maliyet/sorun giderme konularına
+kadar 14 dersten oluşur.
 
-First, run the development server:
+Her ders, gerçek bir terminal veya API anahtarı gerektirmeyen, site
+içinde çalışan **simüle bir terminalde** pratik yapılan egzersizlerle
+sonlanır. İlerleme tarayıcıda `localStorage` ile tutulur; sunucu taraflı
+bir hesap veya veritabanı yoktur.
+
+## Teknoloji
+
+- [Next.js](https://nextjs.org) (App Router), statik export (`output: "export"`)
+  modunda çalışacak şekilde yazılmıştır — sunucu tarafı API route veya
+  server action kullanılmaz.
+- Ders içerikleri MDX (`next-mdx-remote`) ile yazılır, `content/dersler/`
+  klasöründe tutulur.
+- Stil için Tailwind CSS; "Sıcak Kil Tonu" adlı özgün bir açık/koyu tema.
+
+## Yerel Çalıştırma
+
+Bağımlılıkları kurun ve geliştirme sunucusunu başlatın:
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Site varsayılan olarak [http://localhost:3000](http://localhost:3000)
+adresinde açılır.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Statik Export (Production Build)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Proje tamamen statik export uyumludur; bu sayede Vercel, Netlify veya
+GitHub Pages gibi herhangi bir statik barındırma hizmetine değişiklik
+yapmadan deploy edilebilir:
 
-## Learn More
+```bash
+npm run build
+```
 
-To learn more about Next.js, take a look at the following resources:
+Build, `out/` klasörü altında ana sayfa ve 14 ders sayfasının tamamını
+statik HTML olarak üretir.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Testler
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm run test
+```
 
-## Deploy on Vercel
+> **Not:** Yukarıdaki komutlar bu dokümanın yazıldığı an itibariyle
+> geçerlidir; `package.json` zaman içinde değişebilir ve bu komutlar
+> güncelliğini kaybedebilir. Bir tutarsızlık fark ederseniz lütfen bir PR
+> açarak bu README'yi güncel tutmaya yardımcı olun.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Lisans
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Bu proje [MIT Lisansı](./LICENSE) ile lisanslanmıştır.
