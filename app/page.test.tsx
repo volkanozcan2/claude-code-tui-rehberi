@@ -1,20 +1,17 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import HomePage from './page';
-import { dersTamamlanmaOrani } from '@/lib/progress';
+import { dersTamamlanmaOrani, genelIlerleme } from '@/lib/progress';
 
-// `lib/progress`'in SSR/build-time davranışını taklit ediyoruz: bir ders
-// slug'ı için ilk çağrı "build-time" değerini (0) döner, aynı slug için
-// sonraki her çağrı ise "mount sonrası, tarayıcıda gerçek localStorage
-// okunmuş" değerini (0.5) döner. Bu, app/page.tsx'in statik export altında
-// SADECE BİR KEZ (derleme anında) hesaplayıp sonsuza dek %0'da donması
-// yerine, mount olduktan sonra GERÇEKTEN TEKRAR hesaplayıp güncellediğini
-// kanıtlar — localStorage'ı doğrudan seed etmek bunu kanıtlamaz, çünkü
-// jsdom test ortamında `window` zaten her zaman tanımlıdır ve eski
-// (hatalı) kod da bu durumda yanlışlıkla doğru sonucu üretebilir.
+// `lib/progress`'i mock'luyoruz: gerçek değer %50 dönsün. Bileşenler artık
+// başlangıç state'ini SABİT %0 ile kurup gerçek değeri SADECE mount
+// sonrası bir `useEffect` içinde okuyor (bkz. components/HomeProgress.tsx
+// tepesindeki yorum) — bu yüzden mock'ın "ilk çağrı farklı, sonraki çağrı
+// farklı" taklit etmesine gerek yok: fonksiyon zaten yalnızca effect
+// içinde, mount sonrası bir defa çağrılıyor.
 vi.mock('@/lib/progress', () => ({
   dersTamamlanmaOrani: vi.fn(),
-  genelIlerleme: vi.fn(() => 0),
+  genelIlerleme: vi.fn(),
   alistirmaTamamlandiMi: vi.fn(() => false),
   alistirmaTamamlandiIsaretle: vi.fn(),
 }));
@@ -22,20 +19,10 @@ vi.mock('@/lib/progress', () => ({
 describe('HomePage', () => {
   beforeEach(() => {
     localStorage.clear();
-    // Her test için "görülen slug" takibini sıfırla, böylece testler
-    // arasında mock durumu sızmaz (ilk çağrı %0, aynı slug için sonraki
-    // her çağrı %50 döner).
-    const gorulenSluglar = new Set<string>();
     vi.mocked(dersTamamlanmaOrani).mockReset().mockImplementation(
-      (slug: string, toplamAlistirma: number) => {
-        if (toplamAlistirma === 0) return 1;
-        if (!gorulenSluglar.has(slug)) {
-          gorulenSluglar.add(slug);
-          return 0;
-        }
-        return 0.5;
-      }
+      (_slug: string, toplamAlistirma: number) => (toplamAlistirma === 0 ? 1 : 0.5)
     );
+    vi.mocked(genelIlerleme).mockReset().mockReturnValue(0.5);
   });
 
   it('4 bölüm başlığını ve 14 ders kartını gösterir', () => {

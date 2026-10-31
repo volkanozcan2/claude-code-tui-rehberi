@@ -29,7 +29,13 @@ import { getBolumBaslik } from '@/lib/bolumler';
 import type { Bolum, Ders } from '@/lib/types';
 
 export function GenelIlerlemeRozeti({ tumDersler }: { tumDersler: Ders[] }) {
-  const [yuzde, setYuzde] = useState(() => Math.round(genelIlerleme(tumDersler) * 100));
+  // Başlangıç değeri sabit %0'dır (sunucu render'ıyla birebir aynı) — gerçek
+  // değer yalnızca aşağıdaki effect içinde okunur. `genelIlerleme`'yi burada
+  // doğrudan çağırmak hydration uyuşmazlığına yol açar: fonksiyon sadece
+  // build-time Node ortamında "window yok" der, tarayıcıdaki İLK (hydration)
+  // render'ında window zaten vardır, yani gerçek değer sunucunun bastığı
+  // %0'dan hemen farklı çıkıp React'ı uyuşmazlık hatasına düşürür.
+  const [yuzde, setYuzde] = useState(0);
 
   useEffect(() => {
     setYuzde(Math.round(genelIlerleme(tumDersler) * 100));
@@ -42,7 +48,7 @@ export function GenelIlerlemeRozeti({ tumDersler }: { tumDersler: Ders[] }) {
   );
 }
 
-function baslangicIlerlemeHaritasi(tumDersler: Ders[]): Record<string, number> {
+function gercekIlerlemeHaritasi(tumDersler: Ders[]): Record<string, number> {
   const harita: Record<string, number> = {};
   for (const ders of tumDersler) {
     harita[ders.slug] = dersTamamlanmaOrani(ders.slug, ders.alistirmalar.length);
@@ -54,12 +60,14 @@ export function ModulKartlari({ gruplar }: { gruplar: Array<[Bolum, Ders[]]> }) 
   // `useMemo` ile sabit bir referans tutuyoruz; aksi halde her render'da
   // yeni bir dizi üretilir ve bu, aşağıdaki effect'i sonsuz döngüye sokar.
   const tumDersler = useMemo(() => gruplar.flatMap(([, dersler]) => dersler), [gruplar]);
-  const [ilerlemeHaritasi, setIlerlemeHaritasi] = useState<Record<string, number>>(() =>
-    baslangicIlerlemeHaritasi(tumDersler)
-  );
+  // Başlangıçta boş harita (tüm kartlar %0 gösterir, sunucu render'ıyla
+  // aynı) — gerçek değerler yalnızca effect içinde okunur. Bkz. yukarıdaki
+  // `GenelIlerlemeRozeti` yorumu: lazy initializer'da gerçek fonksiyonu
+  // çağırmak hydration uyuşmazlığına yol açar.
+  const [ilerlemeHaritasi, setIlerlemeHaritasi] = useState<Record<string, number>>({});
 
   useEffect(() => {
-    setIlerlemeHaritasi(baslangicIlerlemeHaritasi(tumDersler));
+    setIlerlemeHaritasi(gercekIlerlemeHaritasi(tumDersler));
   }, [tumDersler]);
 
   return (
