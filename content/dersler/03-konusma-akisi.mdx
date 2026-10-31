@@ -4,6 +4,68 @@ baslik: "Konuşma Akışı"
 bolum: temeller
 siraNo: 3
 ozet: "Claude Code ile bir konuşmanın nasıl ilerlediğini anlama."
-alistirmalar: []
+alistirmalar:
+  - id: clear-komutu
+    gorev: "Konuşma geçmişini tamamen temizleyen komutu yaz"
+    kabulKurallari:
+      - "/clear"
+    ipucu: "/ ile başlar, 'temizle' anlamına gelen İngilizce kelime"
 ---
-İçerik yakında.
+
+## Mesaj gönderme ve yanıt bekleme döngüsü
+
+Önceki derste gördüğünüz REPL döngüsünü şimdi biraz daha yakından ele
+alalım. Bir konuşma, sizin bir mesaj yazıp göndermenizle başlar. Claude
+Code mesajınızı aldıktan sonra gerekirse dosyalarınızı okur, komut
+çalıştırır ya da başka bir araç kullanır; bütün bu işi bitirdiğinde
+size bir yanıt yazar ve ardından yeniden sizden mesaj beklemeye döner.
+Bu "siz yazarsınız → Claude işler → Claude yanıtlar → sıra yeniden
+sizde" döngüsü, bir `claude` çalıştırması boyunca tekrar tekrar işler.
+Bir konuşmada art arda birçok mesaj gönderebilirsiniz; her yeni mesaj,
+önceki mesaj-yanıt çiftlerinin altına eklenerek mesaj geçmişini
+büyütür.
+
+## Oturum (session) kavramı
+
+`claude` komutunu çalıştırdığınız andan itibaren geçirdiğiniz bu süreye
+"oturum" (session) denir. Bir oturum boyunca gönderdiğiniz mesajlar ve
+aldığınız yanıtlar, o oturumun geçmişinde birikir; Claude Code yeni bir
+mesajı değerlendirirken genellikle bu geçmişteki önceki mesajları da
+dikkate alır, böylece konuşma tutarlı bir bütün gibi ilerler. Örneğin
+bir dosyadan bahsettikten sonraki mesajınızda sadece "orada bir de şunu
+düzelt" yazsanız, Claude Code hangi dosyadan bahsettiğinizi genellikle
+geçmişten çıkarabilir. Bu geçmiş, oturum sürdüğü sürece korunur.
+
+## Oturuma geri dönme: `/resume`
+
+Bir oturumu kapattığınızda konuşma orada bitmiş gibi görünse de, Claude
+Code'da önceki bir oturuma geri dönmek için kullanılan bir komut
+vardır: `/resume`. Bu komutla, daha önce kapanmış bir oturumun
+geçmişine geri dönüp konuşmaya oradan devam etmeye çalışabilirsiniz. Bu
+komutun tam davranışı ve sunduğu seçenekler sürüme göre değişebilir;
+burada önemli olan, "geçmiş oturumlara dönme" diye bir kavramın ve buna
+karşılık gelen bir komutun var olduğunu bilmenizdir — ayrıntılarını
+kendi ortamınızda denediğinizde göreceksiniz.
+
+## `/clear` ile geçmişi sıfırlama
+
+Bazen konuşmanın birikmiş geçmişinden tamamen kurtulup sıfırdan
+başlamak istersiniz — örneğin önceki konuyla hiç ilgisi olmayan, yeni
+bir işe geçtiğinizde. Bunun için kullanılan komut `/clear`'dır. `/clear`
+yazıp gönderdiğinizde, o ana kadarki mesaj geçmişi tamamen temizlenir
+ve konuşma sanki yeni başlamış gibi, boş bir geçmişle sürer.
+
+## `/clear` ile `/resume` arasındaki fark
+
+Bu iki komutu birbirine karıştırmamak önemlidir, çünkü tam tersi
+yönlerde çalışırlar:
+
+- **`/clear`**, mevcut oturumun geçmişini siler — aynı oturumda ileri
+  gidersiniz, ama geçmiş boşalmış olarak.
+- **`/resume`**, önceki (kapanmış) bir oturumun geçmişine geri dönmeyi
+  dener — yani geçmişi silmek değil, ona yeniden erişmek amacını
+  taşır.
+
+Kısaca: `/clear` geçmişi "unutturur", `/resume` ise geçmişe "geri
+dönmeye çalışır". Aşağıdaki egzersizde, geçmişi tamamen temizleyen
+komutu kendiniz yazarak bunu pekiştirin.
