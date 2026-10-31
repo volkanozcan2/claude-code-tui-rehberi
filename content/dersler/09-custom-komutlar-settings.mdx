@@ -4,6 +4,102 @@ baslik: "Custom Slash Komutları & settings.json"
 bolum: ileri-duzey
 siraNo: 9
 ozet: "Kendi slash komutlarını ve settings.json yapılandırmasını oluşturma."
-alistirmalar: []
+alistirmalar:
+  - id: commands-klasoru
+    gorev: "Özel slash komutlarının tanımlandığı klasörün yolunu yaz"
+    kabulKurallari:
+      - ".claude/commands"
+      - ".claude/commands/"
+    ipucu: "Gizli bir klasör (. ile başlar) içinde 'commands' adlı alt klasör"
 ---
-İçerik yakında.
+
+## Hazır komutların yanına kendi komutlarınızı eklemek
+
+Ders 5'te Claude Code'un `/help`, `/model`, `/cost`, `/status`,
+`/doctor` ve `/init` gibi hazır slash komutlarını gördünüz. Bu
+komutlar Claude Code ile birlikte gelir ve her projede aynı şekilde
+çalışır. Ama projelerinizde sık sık tekrarladığınız, kendinize özgü
+istekler de olabilir: "şu formatta bir commit mesajı yaz", "bu
+bileşen için standart bir test iskeleti oluştur" gibi. Bu tür tekrar
+eden istekleri her seferinde yeniden yazmak yerine, kendi slash
+komutunuzu tanımlayabilirsiniz.
+
+## `.claude/commands/` — özel komutların yuvası
+
+Özel slash komutları, proje kök dizininizdeki `.claude/commands/`
+klasörüne eklediğiniz Markdown dosyalarıyla tanımlanır. Bu klasöre
+koyduğunuz her bir Markdown dosyası, dosya adıyla eşleşen yeni bir
+slash komutuna dönüşür; siz bu dosyanın içine, komut çalıştırıldığında
+Claude Code'a iletilecek talimatı yazarsınız.
+
+Yani mekanizma şu şekilde işler:
+
+1. `.claude/commands/` klasörünü oluşturursunuz (henüz yoksa).
+2. İçine, komutunuzun adını taşıyan bir Markdown dosyası eklersiniz.
+3. Dosyanın içine, o komut çalıştırıldığında Claude Code'un yapmasını
+   istediğiniz şeyi anlatan talimat metnini yazarsınız.
+4. Artık o dosyanın adına karşılık gelen slash komutunu, sohbet
+   kutusuna yazarak çalıştırabilirsiniz.
+
+Bu sayede, projenize veya çalışma tarzınıza özgü tekrarlayan istekleri
+tek bir komut haline getirip, her seferinde yeniden anlatmak zorunda
+kalmadan tekrar tekrar kullanabilirsiniz.
+
+### Proje seviyesi ve kullanıcı seviyesi
+
+CLAUDE.md'de gördüğümüz proje/kullanıcı ayrımı, özel komutlar için de
+geçerlidir. Projenin kendi `.claude/commands/` klasörüne eklediğiniz
+komutlar yalnızca o projede kullanılabilir ve genellikle proje
+deposuyla birlikte saklanır; böylece aynı projede çalışan başka
+kişiler de bu komutlardan yararlanabilir. Kullanıcı seviyesinde
+tanımlanan komutlar ise belirli bir projeye bağlı değildir ve hangi
+projede çalışıyor olursanız olun kullanılabilir.
+
+## settings.json — Claude Code'un davranışını yapılandırma
+
+Özel komutlar "neyi nasıl isteyeceğinizi" kısaltmanıza yarar;
+`settings.json` ise Claude Code'un kendisinin nasıl davranacağını
+yapılandırmanıza yarar. Bu dosyada şu türden ayarları
+tanımlayabilirsiniz:
+
+- **İzin kuralları**: hangi araçların otomatik olarak çalıştırılabileceği,
+  hangilerinin her zaman onay gerektirdiği gibi kurallar. Ders 4'te
+  gördüğümüz izin modlarını, oturum içinde elle değiştirmek yerine
+  projeye kalıcı bir varsayılan olarak yazmanın yoludur bu.
+- **Ortam değişkenleri**: Claude Code'un o proje için kullanmasını
+  istediğiniz ortam değişkenleri.
+- **Hook ayarları**: Claude Code'un belirli olaylarda (bir araç
+  çalıştırılmadan önce veya sonra gibi) otomatik olarak tetiklenecek
+  davranışlarının ayarları. Hook'ları ileride ayrı bir derste daha
+  ayrıntılı göreceğiz; burada yalnızca bu ayarların da
+  `settings.json` üzerinden yapılandırıldığını not ediyoruz.
+
+Özel komutlar gibi, `settings.json` de iki seviyede bulunabilir:
+proje seviyesinde, o projeye özgü ayarları tutan bir dosya; kullanıcı
+seviyesinde ise projeden bağımsız, genel tercihlerinizi tutan bir
+dosya. Böylece bazı ayarları yalnızca belirli bir projeye özgü
+tutabilir, bazılarını ise tüm projelerinizde geçerli olacak şekilde
+kullanıcı seviyesinde tanımlayabilirsiniz.
+
+## Neden bu ikisi birlikte?
+
+Özel komutlar ve `settings.json`, aynı amacın iki farklı yüzüdür:
+Claude Code'u kendi iş akışınıza göre şekillendirmek. Özel komutlar
+"ne" sorusuna (hangi isteği hangi kısayolla yapacağım), `settings.json`
+ise "nasıl" sorusuna (hangi davranış kurallarıyla çalışacağım) cevap
+verir. Bir proje üzerinde uzun süre çalıştıkça, tekrar eden istekleri
+`.claude/commands/` altında komutlara, tekrar eden ayar tercihlerinizi
+de `settings.json`'a taşımak, Claude Code'u o proje için gitgide daha
+"sizin" bir araca dönüştürür.
+
+## Özet
+
+Bu derste Claude Code'u kalıcı olarak kişiselleştirmenin iki yolunu
+gördünüz. Proje kök dizinindeki `.claude/commands/` klasörüne
+eklediğiniz her Markdown dosyası, dosya adına karşılık gelen yeni bir
+özel slash komutuna dönüşür; böylece tekrar eden istekleri kısayol
+haline getirebilirsiniz. `settings.json` ise proje veya kullanıcı
+seviyesinde, izin kuralları, ortam değişkenleri ve hook ayarları gibi
+Claude Code'un davranışını belirleyen yapılandırmaları tutar. Aşağıdaki
+egzersizde, özel slash komutlarının tanımlandığı klasörün yolunu
+yazarak bunu pekiştirin.

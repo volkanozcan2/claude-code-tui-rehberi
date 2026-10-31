@@ -98,4 +98,22 @@ describe('LessonPage', () => {
     fireEvent.click(screen.getAllByRole('button', { name: /kontrol et/i })[0]);
     expect(screen.getAllByText(/doğru/i).length).toBeGreaterThan(0);
   });
+
+  it('ders 9 egzersizi .claude/commands klasör yolunu kabul eder', async () => {
+    const el = await LessonPage({ params: Promise.resolve({ slug: 'custom-komutlar-settings' }) });
+    render(el as React.ReactElement);
+    const inputs = screen.getAllByRole('textbox');
+    fireEvent.change(inputs[0], { target: { value: '.claude/commands' } });
+    fireEvent.click(screen.getAllByRole('button', { name: /kontrol et/i })[0]);
+    expect(screen.getAllByText(/doğru/i).length).toBeGreaterThan(0);
+  });
+
+  it('ders 9 egzersizi sonunda eğik çizgi olan yolu da kabul eder', async () => {
+    const el = await LessonPage({ params: Promise.resolve({ slug: 'custom-komutlar-settings' }) });
+    render(el as React.ReactElement);
+    const inputs = screen.getAllByRole('textbox');
+    fireEvent.change(inputs[0], { target: { value: '.claude/commands/' } });
+    fireEvent.click(screen.getAllByRole('button', { name: /kontrol et/i })[0]);
+    expect(screen.getAllByText(/doğru/i).length).toBeGreaterThan(0);
+  });
 });
