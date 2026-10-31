@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { getBolumBaslik } from '@/lib/dersler';
+import { getBolumBaslik } from '@/lib/bolumler';
 import type { Bolum, Ders } from '@/lib/types';
 
 interface LessonNavProps {

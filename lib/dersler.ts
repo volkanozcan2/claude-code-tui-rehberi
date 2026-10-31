@@ -1,16 +1,12 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import matter from 'gray-matter';
-import type { Bolum, Ders } from './types';
+import type { Ders } from './types';
+import { getBolumBaslik } from './bolumler';
+
+export { getBolumBaslik };
 
 const DERSLER_DIZINI = path.join(process.cwd(), 'content', 'dersler');
-
-const BOLUM_BASLIKLARI: Record<Bolum, string> = {
-  temeller: 'Temeller',
-  'gunluk-kullanim': 'Günlük Kullanım',
-  'ileri-duzey': 'İleri Düzey',
-  uzmanlik: 'Uzmanlık',
-};
 
 function dersDosyalariniOku(): Ders[] {
   const dosyaAdlari = fs
@@ -49,8 +45,4 @@ export function getAllDersler(): Ders[] {
 
 export function getDersBySlug(slug: string): Ders | undefined {
   return tumDersDosyalariniYukle().find((ders) => ders.slug === slug);
-}
-
-export function getBolumBaslik(bolum: Bolum): string {
-  return BOLUM_BASLIKLARI[bolum];
 }
